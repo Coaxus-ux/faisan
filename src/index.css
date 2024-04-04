@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-variation-settings: "slnt" 0;
+    background-color: rgb(249 250 251 / 1) !important;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] { -moz-appearance:textfield; }
+
+@layer components {
+    .text-dark-500 {
+        color: #1A1A1B;
+    }
+
+    .text-dark-700 {
+        color: #1A1A1B;
+
+    }
+
+    .is-active {
+        @apply
+        flex items-center py-2.5 px-4 text-base font-normal rounded-lg bg-white shadow-lg shadow-gray-200 transition-all duration-200;
+
+    }
+
+    .is-active > div {
+
+        @apply
+        shadow-lg shadow-gray-300 bg-blue-200  w-8 h-8 p-2.5 mr-1 rounded-lg text-center grid place-items-center;
+    }
+
+    .not-active {
+        @apply
+        flex items-center py-2.5 px-4 text-base font-normal rounded-lg hover:bg-gray-200 transition-all duration-200;
+    }
+
+    .not-active > div {
+        @apply
+        bg-white shadow-lg shadow-gray-300 w-8 h-8 p-2.5 mr-1 rounded-lg text-center grid place-items-center;
+    }
+}
