@@ -11,8 +11,8 @@ import {notify} from "../../hooks/notify";
 export default function Login() {
     const navigate = useNavigate();
     const [isVisible, setIsVisible] = React.useState(false);
-    const {login, isLoading, getIsLogged} = useLoginStore();
 
+    const {login, isLoading, getIsLogged} = useLoginStore();
     const [user, setUser] = React.useState({
         email: '',
         password: '',
