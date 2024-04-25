@@ -11,6 +11,7 @@ export default defineConfig({
             '@store': '/src/store',
             '@hooks': '/src/hooks',
             '@utils': '/src/utils',
+            "@interceptors": "/src/interceptors",
         },
     },
 })
