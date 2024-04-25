@@ -1,6 +1,6 @@
 export const initialFilters = {
     bornDate: {
-        name: "Nacimiento", value: "",
+        name: "Nacimiento", value: ""
     }, state: {
         name: "Estado", value: "", id: ""
     }, birthType: {
