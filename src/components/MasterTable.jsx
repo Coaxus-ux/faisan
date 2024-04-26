@@ -1,14 +1,16 @@
 import React from "react";
 import {
-    Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, Chip, Tooltip, getKeyValue
+    Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Chip
 } from "@nextui-org/react";
 import {FaEye} from "react-icons/fa";
 import {MdEdit} from "react-icons/md";
+import {format} from 'date-fns';
+import {es} from 'date-fns/locale/es';
+import PropTypes from 'prop-types';
 
-const statusColorMap = {
-    active: "success",
-    paused: "danger",
-    vacation: "warning",
+MasterTable.propTypes = {
+    columns: PropTypes.array.isRequired,
+    data: PropTypes.array.isRequired,
 };
 export default function MasterTable({columns, data}) {
     const renderCell = React.useCallback((animal, columnKey) => {
@@ -16,25 +18,30 @@ export default function MasterTable({columns, data}) {
             case "animal_number":
                 return (
                     <div className="flex flex-col">
-                        <p className="text-bold text-sm capitalize">{animal.animalFarmNumber}</p>
-                    </div>
-                );
-            case "birth_date":
-                return (
-                    <div className="flex flex-col">
-                        <p className="text-bold text-sm capitalize">{animal.animalBirthDate}</p>
-                    </div>
-                );
-            case "animal_birth_type":
-                return (
-                    <div className="flex flex-col">
-                        <p className="text-bold text-sm capitalize">{animal.fertilisationType.typeFertilisation}</p>
+                        <p className="text-bold capitalize">{animal.animalFarmNumber}</p>
                     </div>
                 );
             case "animal_sex":
                 return (
                     <div className="flex flex-col">
-                        <p className="text-bold text-sm capitalize">{animal.animalSex}</p>
+                        <p className="text-bold capitalize">{animal.animalSex}</p>
+                    </div>
+                );
+            case "birth_date":
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold capitalize">{format(new Date(animal.animalBirthDate), 'dd MMM yyyy', {locale: es})}</p>
+                    </div>
+                );
+            case "animal_birth_type":
+                return (
+                    <div className="flex flex-col">
+                        {animal.fertilisationType.typeFertilisation === "Inseminación" ?
+                            <Chip color="warning" variant="flat">{animal.fertilisationType.typeFertilisation}</Chip>
+                            :
+                            <Chip color="success" variant="flat">{animal.fertilisationType.typeFertilisation}</Chip>
+                        }
+
                     </div>
                 );
             case "actions":

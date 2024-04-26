@@ -5,9 +5,9 @@ import {useEffect} from "react";
 import {TIanimal} from "@/utils/columns.js";
 
 export default function Males() {
-    const {getAnimals, getMales} = useAnimalStore()
+    const {getMalesAnimals, getMales} = useAnimalStore()
     useEffect(() => {
-        getAnimals();
+        getMalesAnimals("Macho");
         // eslint-disable-next-line
     }, []);
     return (

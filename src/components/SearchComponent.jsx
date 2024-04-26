@@ -29,7 +29,7 @@ export default function SearchComponent() {
         });
     };
     const lengthFilters = () => {
-        return Object.entries(filters).filter(([key, data]) => data.value).length === 0;
+        return Object.entries(filters).filter(([, data]) => data.value).length === 0;
     };
     const handleClear = () => {
         setFilters(initialFilters);
