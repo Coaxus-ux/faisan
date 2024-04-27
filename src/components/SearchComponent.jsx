@@ -4,16 +4,20 @@ import {TiDelete} from "react-icons/ti";
 import {Button, Input, Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import {DateRangePicker} from "@nextui-org/date-picker";
 import {useFertilisationStore} from "@/store/FertilisationStore";
-import {initialFilters} from "@/utils/initialFilters";
+import {useFiltersStore} from "@/store/filtersStore";
 
 export default function SearchComponent() {
-    const [filters, setFilters] = useState(initialFilters);
+    const {setGlobalFilters, getFilters, clearFilters} = useFiltersStore();
     const {getAllFertilisation, fertilisation} = useFertilisationStore();
-
+    const [filters, setFilters] = useState(getFilters());
+    const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
-        getAllFertilisation();
-        // eslint-disable-next-line
-    }, []);
+        if (!isMounted) {
+            getAllFertilisation();
+            setIsMounted(true);
+        }
+        setGlobalFilters(filters);
+    }, [filters]);
     const handleFilter = (e) => {
         setFilters({
             ...filters, [e.target.name]: {
@@ -32,7 +36,8 @@ export default function SearchComponent() {
         return Object.entries(filters).filter(([, data]) => data.value).length === 0;
     };
     const handleClear = () => {
-        setFilters(initialFilters);
+        clearFilters();
+        setFilters(getFilters());
     }
     return (<section className="shadow bg-white rounded p-5 flex flex-col gap-3">
         <div className="flex justify-between">
@@ -92,15 +97,23 @@ export default function SearchComponent() {
                     defaultItems={fertilisation}
                     name="birthType"
                     onSelectionChange={(e) => {
-                        if (!e) return;
                         setFilters({
-                            ...filters, birthType: {
-                                ...filters.birthType,
-                                value: fertilisation.find((item) => item.id === e).typeFertilisation,
-                                id: e || ""
-                            }
+                            ...filters,
+                            birthType: !e ?
+                                {
+                                    ...filters.birthType,
+                                    value: "",
+                                    id: ""
+                                }
+                                :
+                                {
+                                    ...filters.birthType,
+                                    value: fertilisation.find((item) => item.id === e).typeFertilisation,
+                                    id: e
+                                }
                         })
                     }}
+
                     onKeyDown={(e) => e.continuePropagation()}
                     selectedKey={filters.birthType.id}
                 >
@@ -114,8 +127,8 @@ export default function SearchComponent() {
             </div>
 
         </div>
-        <div className="bg-default-100 p-3 rounded-2xl flex items-center h-16 justify-between">
-            <div className="flex gap-1 items-center">
+        <div className="bg-default-100 p-3 rounded-2xl flex items-center min-h-16 justify-between ">
+            <div className="flex gap-1 items-center flex-wrap">
                 <p className="text-sm text-default-600">Filtros aplicados: </p>
                 {Object.entries(filters).map(([key, data]) => {
 
@@ -143,7 +156,7 @@ export default function SearchComponent() {
                 })}
             </div>
             <Button color="danger" variant="flat" isDisabled={lengthFilters()} onClick={handleClear}
-                    className="h-full self-end">Limpiar</Button>
+                    className="min-h-full">Limpiar</Button>
         </div>
     </section>)
 }
