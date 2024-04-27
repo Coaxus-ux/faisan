@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Chip
+    Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Chip, Pagination
 } from "@nextui-org/react";
 import {FaEye} from "react-icons/fa";
 import {MdEdit} from "react-icons/md";
@@ -13,6 +13,17 @@ MasterTable.propTypes = {
     data: PropTypes.array.isRequired,
 };
 export default function MasterTable({columns, data}) {
+    const [page, setPage] = React.useState(1);
+    const rowsPerPage = 5;
+    const pages = Math.ceil(data.length / rowsPerPage);
+
+    const dataSorted = React.useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        return data.slice(start, end);
+    }, [page, data]);
+
     const renderCell = React.useCallback((animal, columnKey) => {
         switch (columnKey) {
             case "animal_number":
@@ -21,11 +32,21 @@ export default function MasterTable({columns, data}) {
                         <p className="text-bold capitalize">{animal.animalFarmNumber}</p>
                     </div>
                 );
-            case "animal_sex":
+            case "animalFEDGAN":
                 return (
                     <div className="flex flex-col">
-                        <p className="text-bold capitalize">{animal.animalSex}</p>
+                        <p className="text-bold capitalize">{animal.animalFEDGAN}</p>
                     </div>
+                );
+            case "animalColor":
+                return (
+                    <Chip color="primary" variant="light">{animal.animalColor.animalColor}</Chip>
+                );
+            case "animal_sex":
+                return (
+
+                    <p className="text-bold capitalize">{animal.animalSex}</p>
+
                 );
             case "birth_date":
                 return (
@@ -35,14 +56,14 @@ export default function MasterTable({columns, data}) {
                 );
             case "animal_birth_type":
                 return (
-                    <div className="flex flex-col">
+                    <>
                         {animal.fertilisationType.typeFertilisation === "Inseminación" ?
                             <Chip color="warning" variant="flat">{animal.fertilisationType.typeFertilisation}</Chip>
                             :
                             <Chip color="success" variant="flat">{animal.fertilisationType.typeFertilisation}</Chip>
                         }
 
-                    </div>
+                    </>
                 );
             case "actions":
                 return (
@@ -63,13 +84,32 @@ export default function MasterTable({columns, data}) {
                 return null;
         }
     }, []);
-    return (<Table aria-label="Example table with custom cells">
+    return (<Table
+
+        aria-label="Master Table"
+        className="mb-3"
+        bottomContent={
+            <div className="flex w-full justify-center">
+                {pages > 1 &&
+                    <Pagination
+                        showControls
+                        showShadow
+                        color="default"
+                        page={page}
+                        total={pages}
+                        onChange={(page) => setPage(page)}
+                    />
+                }
+            </div>
+
+        }
+    >
         <TableHeader columns={columns}>
             {(column) => (<TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
                 {column.name}
             </TableColumn>)}
         </TableHeader>
-        <TableBody items={data}>
+        <TableBody items={dataSorted}>
             {(item) => (<TableRow key={item.id}>
                 {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
             </TableRow>)}

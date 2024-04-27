@@ -1,7 +1,9 @@
 export const TIanimal = [
     {name: "NUMERO ANIMAL", uid: "animal_number"},
+    {name: "SEXO", uid: "animal_sex"},
+    {name: "FEDGAN", uid: "animalFEDGAN"},
     {name: "FECHA NACIMIENTO", uid: "birth_date"},
     {name: "FECUNDACIÓN", uid: "animal_birth_type"},
-    {name: "SEXO", uid: "animal_sex"},
+    {name: "COLOR", uid: "animalColor"},
     {name: "ACTIONS", uid: "actions"},
 ];

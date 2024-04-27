@@ -24,5 +24,11 @@ export const useLoginStore = create((set, get) => ({
     },
     getIsLogged: () => {
         return get().isLogged
-    }
+    },
+    logout: () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('refreshToken')
+        set({isLogged: false})
+        window.location.reload()
+    },
 }))
