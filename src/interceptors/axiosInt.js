@@ -26,7 +26,8 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (error) => {
-        if (error.response.status === 401) {
+        console.error(error);
+       /* if (error.response.status === 401) {
             if (localStorage.getItem('tryRefresh') === '1') {
                 localStorage.removeItem('tryRefresh');
                 window.location.href = '/auth/login';
@@ -34,7 +35,7 @@ axiosInstance.interceptors.response.use(
             }
             localStorage.setItem('tryRefresh', '0');
             refreshToken();
-        }
+        }*/
     },
 );
 const refreshToken = async () => {

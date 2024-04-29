@@ -11,45 +11,54 @@ const ProtectedRoute = lazy(() => import('./ProtectedRoute.jsx'));
 // const AnimalPanel = lazy(() => import('./pages/Animal/AnimalPanel.jsx'));
 const Females = lazy(() => import('./pages/Animal/Females.jsx'));
 const Males = lazy(() => import('./pages/Animal/Males.jsx'));
-
+const Tools = lazy(() => import('./pages/Tools/Tools.jsx'));
+const Colors = lazy(() => import('./pages/Tools/Colors.jsx'));
 export const routes = [
 
-    {
-        path: '/auth/login',
-        element: <Login/>
-    },
-    {
-        path: '/auth/recovery-password',
-        element: <RecoveryPassword/>
-    },
-    {
-        path: '/auth/token',
-        element: <Token/>
-    },
-    {
-        path: '/',
-        element: <ProtectedRoute/>,
-        children: [
-            {
-                path: '/dashboard',
-                element: <Dashboard/>
-            },
-            {
-                path: '/females',
-                element: <Females/>
-            },
-            {
-                path: '/males',
-                element: <Males/>
-            }
-        ]
+        {
+            path: '/auth/login',
+            element: <Login/>
+        },
+        {
+            path: '/auth/recovery-password',
+            element: <RecoveryPassword/>
+        },
+        {
+            path: '/auth/token',
+            element: <Token/>
+        },
+        {
+            path: '/',
+            element: <ProtectedRoute/>,
+            children: [
+                {
+                    path: '/dashboard',
+                    element: <Dashboard/>
+                },
+                {
+                    path: '/females',
+                    element: <Females/>
+                },
+                {
+                    path: '/males',
+                    element: <Males/>
+                },
+                {
+                    path: '/tools',
+                    element: <Tools/>
+                },
+                {
+                    path: '/tools/colors',
+                    element: <Colors/>
+                }
+            ]
 
-    },
-    {
-        path: '*',
-        element: <Page404/>
-    }
-]
+        },
+        {
+            path: '*',
+            element: <Page404/>
+        }
+    ]
 ;
 export default createBrowserRouter(routes);
 

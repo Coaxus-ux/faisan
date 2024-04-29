@@ -3,6 +3,7 @@ import {GiCow, GiBullHorns} from "react-icons/gi";
 import {NavLink} from 'react-router-dom';
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, User} from "@nextui-org/react";
 import {HiDotsHorizontal} from "react-icons/hi";
+import { FaScrewdriver } from "react-icons/fa";
 import {useEffect} from "react";
 import {useResponsive} from "@/store/ResponseStore.js";
 
@@ -14,7 +15,12 @@ export default function Sidebar() {
         path: "/females", name: "Hembras", icon: <GiCow size="12"/>,
     }, {
         path: "/males", name: "Machos", icon: <GiBullHorns size="12"/>,
-    }]
+    },
+        {
+            path: "/tools", name: "Herramientas", icon: <FaScrewdriver size="12"/>,
+        }
+
+    ]
     useEffect(() => {
         if (getState()) {
             document.getElementById('sidebar').classList.remove('hidden');

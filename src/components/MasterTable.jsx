@@ -7,7 +7,7 @@ import {MdEdit} from "react-icons/md";
 import {format, differenceInCalendarDays, differenceInCalendarMonths, differenceInCalendarYears} from 'date-fns';
 import {es} from 'date-fns/locale/es';
 import PropTypes from 'prop-types';
-
+import Dot from "@/components/Dot";
 MasterTable.propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
@@ -43,7 +43,10 @@ export default function MasterTable({columns, data}) {
                 );
             case "animalColor":
                 return (
-                    <Chip color="primary" variant="light">{animal.animalColor.animalColor}</Chip>
+                    <div className="flex gap-1 items-center">
+                        <Dot color={animal.animalColor.animalHex} />
+                        {animal.animalColor.animalColor}
+                    </div>
                 );
             case "animal_sex":
                 return (
