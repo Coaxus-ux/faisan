@@ -4,7 +4,7 @@ import {
 } from "@nextui-org/react";
 import {FaEye} from "react-icons/fa";
 import {MdEdit} from "react-icons/md";
-import {format} from 'date-fns';
+import {format, differenceInCalendarDays, differenceInCalendarMonths, differenceInCalendarYears} from 'date-fns';
 import {es} from 'date-fns/locale/es';
 import PropTypes from 'prop-types';
 
@@ -23,8 +23,11 @@ export default function MasterTable({columns, data}) {
 
         return data.slice(start, end);
     }, [page, data]);
-
+    const dateNow = new Date();
     const renderCell = React.useCallback((animal, columnKey) => {
+        const months = differenceInCalendarMonths(dateNow, new Date(animal.animalBirthDate)) % 12
+        const days = differenceInCalendarDays(dateNow, new Date(animal.animalBirthDate)) % 30 - 1
+        const years = differenceInCalendarYears(dateNow, new Date(animal.animalBirthDate))
         switch (columnKey) {
             case "animal_number":
                 return (
@@ -52,6 +55,16 @@ export default function MasterTable({columns, data}) {
                 return (
                     <div className="flex flex-col">
                         <p className="text-bold capitalize">{format(new Date(animal.animalBirthDate), 'dd MMM yyyy', {locale: es})}</p>
+                        <div className="flex gap-1">
+                            {years === 0 && months === 0 ? <p className="text-blue-200 text-xs">{days} Dias </p> : null}
+                            {years === 0 && months !== 0 ? <><p className="text-blue-200 text-xs">{months} Meses </p>
+                                <p className="text-blue-200 text-xs">{days} Dias </p></> : null}
+                            {years !== 0 ? <> <p className="text-blue-200 text-xs">{years} Años </p> <p
+                                className="text-blue-200 text-xs">{months} Meses </p>
+                                <p className="text-blue-200 text-xs">{days} Dias </p>  </> : null}
+
+
+                        </div>
                     </div>
                 );
             case "animal_birth_type":
