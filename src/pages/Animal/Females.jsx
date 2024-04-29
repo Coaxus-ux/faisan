@@ -4,6 +4,8 @@ import MasterTable from "@/components/MasterTable.jsx";
 import {useAnimalStore} from "@/store/AnimalStore.js";
 import {TIanimal} from "@/utils/columns.js";
 import {useFiltersStore} from "@/store/filtersStore.js";
+import Loader from "@/components/Loader.jsx";
+
 export default function Females() {
     const {getMalesAnimals, getMales} = useAnimalStore();
     const {filterData, filters, getFilterKeys} = useFiltersStore();
@@ -30,7 +32,7 @@ export default function Females() {
         <div className="flex flex-col gap-2 max-w-fit mx-auto max-h-4xl mt-10">
             <SearchComponent/>
             {isLoading ? (
-                <p>Loading...</p>
+                <Loader/>
             ) : (
                 <MasterTable columns={TIanimal} data={getFilterKeys()}/>
             )}

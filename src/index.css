@@ -9,13 +9,16 @@ html {
     font-variation-settings: "slnt" 0;
     background-color: rgb(249 250 251 / 1) !important;
 }
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-input[type=number] { -moz-appearance:textfield; }
+input[type=number] {
+    -moz-appearance: textfield;
+}
 
 @layer components {
     .text-dark-500 {
@@ -47,5 +50,52 @@ input[type=number] { -moz-appearance:textfield; }
     .not-active > div {
         @apply
         bg-white shadow-lg shadow-gray-300 w-8 h-8 p-2.5 mr-1 rounded-lg text-center grid place-items-center;
+    }
+}
+
+/* HTML:  */
+.loader {
+    width: 20px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #000;
+    box-shadow: 0 0 0 0 #0004;
+    animation: l2 1.5s infinite linear;
+    position: relative;
+    margin: 0 auto;
+    inset: 0;
+    display: grid;
+    place-items: center;
+}
+
+.loader-container {
+    background: #0000004d;
+    position: absolute;
+    inset: 0;
+    margin: 0 auto;
+    place-items: center;
+    display: grid;
+    z-index: 9999;
+
+}
+
+.loader:before,
+.loader:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 0 0 #0004;
+    animation: inherit;
+    animation-delay: -0.5s;
+}
+
+.loader:after {
+    animation-delay: -1s;
+}
+
+@keyframes l2 {
+    100% {
+        box-shadow: 0 0 0 40px #0000
     }
 }
