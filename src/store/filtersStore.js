@@ -1,5 +1,6 @@
 import {create} from "zustand";
 import {initialFilters} from "@/utils/initialFilters";
+import {compareDates} from "@/utils/compareDates";
 
 export const useFiltersStore = create((set, get) => ({
     filters: initialFilters,
@@ -9,13 +10,13 @@ export const useFiltersStore = create((set, get) => ({
     clearFilters: () => set({filters: initialFilters}),
     filterData: (data) => {
         const filters = get().filters;
-        if ( filters === initialFilters ) return set({filterKeys: data});
+        if (filters === initialFilters) return set({filterKeys: data});
         const filterKeys = data.filter(item => {
             const farmNumber = item.animalFarmNumber.replace('/', '');
             const fedeganNumber = item.animalFEDGAN || '';
-            console.log(filters.bornDate.value)
+
             return (
-                (!filters.bornDate.value || item.animalBirthDate === filters.bornDate.value) &&
+                (!filters.bornDate.value || compareDates(item.animalBirthDate, filters.bornDate.value)) &&
                 (!filters.state.value || item.state === filters.state.value) &&
                 (!filters.birthType.value || item.fertilisationType.typeFertilisation === filters.birthType.value) &&
                 (!filters.number.value || farmNumber.startsWith(filters.number.value)) &&
