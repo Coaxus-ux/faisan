@@ -1,11 +1,11 @@
 import {Card, CardBody, CardFooter, Image} from "@nextui-org/react";
 import {useNavigate} from "react-router-dom";
-
+import RefImg from "@/assets/fruit-4.jpeg";
 export default function Tools() {
     const list = [
         {
             title: "Colores",
-            img: "https://nextui.org/images/fruit-4.jpeg",
+            img: RefImg,
             description: "Crea y edita",
             url: "/tools/colors"
         },

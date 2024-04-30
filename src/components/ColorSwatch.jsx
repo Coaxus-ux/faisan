@@ -1,6 +1,6 @@
 import {Card, CardFooter, Button, CardBody} from "@nextui-org/react";
+import ModalUpdateColor from "@/components/ModalUpdateColor.jsx";
 import PropTypes from 'prop-types';
-
 ColorSwatch.propTypes = {
     color: PropTypes.object.isRequired
 }
@@ -20,10 +20,7 @@ export default function ColorSwatch({color}) {
             <CardFooter
                 className="flex gap-3 h-1/5 justify-between">
                 <p className="text-tiny">{color.animalColor} </p>
-                <Button className="text-tiny text-white bg-black/20" variant="flat" color="default" radius="lg"
-                        size="sm">
-                    Modificar
-                </Button>
+                <ModalUpdateColor colorProp={color}/>
             </CardFooter>
         </Card>
 
