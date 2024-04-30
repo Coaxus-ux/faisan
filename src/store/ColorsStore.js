@@ -15,7 +15,7 @@ export const useColorsStore = create((set, get) => ({
     getColors: () => get().colors,
     createColor: async (color) => {
         const {name, hex} = color;
-        await axiosInstance.put('/color/create', {
+        await axiosInstance.post('/color/create', {
             userOwner: getUserId(),
             nameColor: name,
             hexColor: hex
@@ -24,7 +24,7 @@ export const useColorsStore = create((set, get) => ({
         });
     },
     updateColorApi: async (color) => {
-        await axiosInstance.post('/color/update', color).then(() => {
+        await axiosInstance.put('/color/update', color).then(() => {
             notify("Color actualizado exitosamente");
         });
     },

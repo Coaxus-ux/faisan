@@ -38,7 +38,8 @@ axiosInstance.interceptors.response.use(
             refreshToken();
 
         }
-        notify("Oppss, algo salio mal.", 'error');
+        console.error(error);
+        notify(error.response.data.message, 'error');
         return Promise.reject(error);
     },
 );
