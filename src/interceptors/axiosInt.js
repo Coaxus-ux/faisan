@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {notify} from "@/hooks/notify";
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_SERVER_URL,
@@ -26,8 +27,8 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (error) => {
-        console.error(error);
-       /* if (error.response.status === 401) {
+
+        if (error.response.status === 401) {
             if (localStorage.getItem('tryRefresh') === '1') {
                 localStorage.removeItem('tryRefresh');
                 window.location.href = '/auth/login';
@@ -35,7 +36,10 @@ axiosInstance.interceptors.response.use(
             }
             localStorage.setItem('tryRefresh', '0');
             refreshToken();
-        }*/
+
+        }
+        notify("Oppss, algo salio mal.", 'error');
+        return Promise.reject(error);
     },
 );
 const refreshToken = async () => {

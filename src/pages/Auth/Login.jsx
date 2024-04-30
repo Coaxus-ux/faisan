@@ -6,7 +6,7 @@ import {IoMdEye} from "react-icons/io";
 import {IoMdEyeOff} from "react-icons/io";
 import {Checkbox} from "@nextui-org/react";
 import {useNavigate} from "react-router-dom";
-import {notify} from "../../hooks/notify";
+import {notify} from "@/hooks/notify";
 
 export default function Login() {
     const navigate = useNavigate();

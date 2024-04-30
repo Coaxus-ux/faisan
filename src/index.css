@@ -99,3 +99,10 @@ input[type=number] {
         box-shadow: 0 0 0 40px #0000
     }
 }
+
+input[type=color] {
+    -webkit-appearance: none;
+    border-radius: 30px;
+    display: block;
+    background: none;
+}
