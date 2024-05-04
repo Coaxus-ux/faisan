@@ -7,7 +7,7 @@ import {useFiltersStore} from "@/store/filtersStore.js";
 import Loader from "@/components/Loader.jsx";
 
 export default function Females() {
-    const {getMalesAnimals, getMales} = useAnimalStore();
+    const {getAnimalsBySex, getAnimals} = useAnimalStore();
     const {filterData, filters, getFilterKeys} = useFiltersStore();
     const [isMounted, setIsMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // Track loading state
@@ -15,7 +15,7 @@ export default function Females() {
     useEffect(() => {
         if (!isMounted) {
             setIsMounted(true);
-            getMalesAnimals("Hembra").then(() => {
+            getAnimalsBySex("Hembra").then(() => {
                 setIsLoading(false);
             });
         }
@@ -24,9 +24,9 @@ export default function Females() {
 
     useEffect(() => {
         if (!isLoading) {
-            filterData(getMales());
+            filterData(getAnimals());
         }
-    }, [filters, isLoading, getMales, filterData]);
+    }, [filters, isLoading, getAnimals, filterData]);
 
     return (
         <div className="flex flex-col gap-2 max-w-fit mx-auto max-h-4xl mt-10">

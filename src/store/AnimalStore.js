@@ -4,8 +4,7 @@ import axiosInstance from "@/interceptors/axiosInt";
 
 export const useAnimalStore = create((set, get) => ({
     animals: [],
-    malesAnimals: [],
-    getAnimals: async () => {
+    getAnimalsApi: async () => {
         await axiosInstance.post('/animal/all', {
             userOwner: getUserId()
         }).then((response) => {
@@ -13,17 +12,17 @@ export const useAnimalStore = create((set, get) => ({
         })
     },
 
-    getMalesAnimals: async (sex) => {
+    getAnimalsBySex: async (sex) => {
         await axiosInstance.post('/animal/bySex', {
             userOwner: getUserId(),
             animalSex: sex
         }).then((response) => {
-                set({malesAnimals: response.data.animal})
+                set({animals: response.data.animal})
             }
         )
     },
-    getMales: () => {
-        return get().malesAnimals
+    getAnimals: () => {
+        return get().animals
     },
 }))
 

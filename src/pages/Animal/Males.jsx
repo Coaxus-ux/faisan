@@ -4,9 +4,10 @@ import {useAnimalStore} from "@/store/AnimalStore.js";
 import {useEffect, useState} from "react";
 import {TIanimal} from "@/utils/columns.js";
 import {useFiltersStore} from "@/store/filtersStore.js";
+import Loader from "@/components/Loader.jsx";
 
 export default function Males() {
-    const {getMalesAnimals, getMales} = useAnimalStore();
+    const {getAnimalsBySex, getAnimals} = useAnimalStore();
     const {filterData, filters, getFilterKeys} = useFiltersStore();
     const [isMounted, setIsMounted] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // Track loading state
@@ -14,7 +15,7 @@ export default function Males() {
     useEffect(() => {
         if (!isMounted) {
             setIsMounted(true);
-            getMalesAnimals("Macho").then(() => {
+            getAnimalsBySex("Macho").then(() => {
                 setIsLoading(false);
             });
         }
@@ -23,15 +24,15 @@ export default function Males() {
 
     useEffect(() => {
         if (!isLoading) {
-            filterData(getMales());
+            filterData(getAnimals());
         }
-    }, [filters, isLoading, getMales, filterData]);
+    }, [filters, isLoading, getAnimals, filterData]);
 
     return (
         <div className="flex flex-col gap-2 max-w-fit mx-auto max-h-4xl mt-10">
             <SearchComponent/>
             {isLoading ? (
-                <p>Loading...</p> // Render loading indicator while API call is in progress
+                <Loader/>
             ) : (
                 <MasterTable columns={TIanimal} data={getFilterKeys()}/>
             )}

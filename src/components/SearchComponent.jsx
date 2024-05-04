@@ -18,7 +18,7 @@ export default function SearchComponent() {
         }
         setGlobalFilters(filters);
     }, [filters]);
-    const handleFilter = (e) => {
+    const onHandleFilterChange = (e) => {
         setFilters({
             ...filters, [e.target.name]: {
                 ...filters[e.target.name], value: e.target.value,
@@ -80,6 +80,7 @@ export default function SearchComponent() {
                     name="state"
                     defaultItems={animals}
                     onSelectionChange={(e) => {
+
                         setFilters({
                             ...filters, state: {
                                 ...filters.state, value: e,
@@ -119,9 +120,9 @@ export default function SearchComponent() {
                 >
                     {(item) => <AutocompleteItem key={item.id}>{item.typeFertilisation}</AutocompleteItem>}
                 </Autocomplete>
-                <Input label="Numero animal" type="number" name="number" onChange={handleFilter} autoComplete="off"
+                <Input label="Numero animal" type="number" name="number" onChange={onHandleFilterChange} autoComplete="off"
                        value={filters.number.value}/>
-                <Input label="Numero FEDEGAN" type="number" name="fedeganNumber" onChange={handleFilter}
+                <Input label="Numero FEDEGAN" type="number" name="fedeganNumber" onChange={onHandleFilterChange}
                        autoComplete="off"
                        value={filters.fedeganNumber.value}/>
             </div>
@@ -131,7 +132,6 @@ export default function SearchComponent() {
             <div className="flex gap-1 items-center flex-wrap">
                 <p className="text-sm text-default-600">Filtros aplicados: </p>
                 {Object.entries(filters).map(([key, data]) => {
-
                     if (!data.value) return null;
                     if (data.name === "Nacimiento") {
                         return (<div
@@ -139,6 +139,7 @@ export default function SearchComponent() {
                             className="bg-default-300 shadowp p-0.5 rounded-2xl px-2 flex items-center gap-1 text-sm text-default-600">
                             <TiDelete size="18" className="hover:text-red-400 cursor-pointer text-default-700"
                                       onClick={() => {
+
                                           onDeleteFilter(key)
                                       }}/>
                             {data.name}: {data.value.startDate.day}/{data.value.startDate.month}/{data.value.startDate.year} - {data.value.endDate.day}/{data.value.endDate.month}/{data.value.endDate.year}
