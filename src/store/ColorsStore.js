@@ -5,6 +5,7 @@ import {notify} from "@/hooks/notify";
 
 export const useColorsStore = create((set, get) => ({
     colors: [],
+    getColors: () => get().colors,
     getColorsApi: async () => {
         await axiosInstance.post('/color/all', {
             userOwner: getUserId()
@@ -12,7 +13,6 @@ export const useColorsStore = create((set, get) => ({
             set({colors: response.data.colors})
         })
     },
-    getColors: () => get().colors,
     createColor: async (color) => {
         const {name, hex} = color;
         await axiosInstance.post('/color/create', {

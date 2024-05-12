@@ -5,8 +5,10 @@ import {Button, Input, Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import {DateRangePicker} from "@nextui-org/date-picker";
 import {useFertilisationStore} from "@/store/FertilisationStore";
 import {useFiltersStore} from "@/store/filtersStore";
-
+import {useNavigate} from "react-router-dom";
+import {isEmpty} from "@/utils/objectLength";
 export default function SearchComponent() {
+    const navigate = useNavigate();
     const {setGlobalFilters, getFilters, clearFilters} = useFiltersStore();
     const {getAllFertilisation, fertilisation} = useFertilisationStore();
     const [filters, setFilters] = useState(getFilters());
@@ -32,9 +34,6 @@ export default function SearchComponent() {
             }
         });
     };
-    const lengthFilters = () => {
-        return Object.entries(filters).filter(([, data]) => data.value).length === 0;
-    };
     const handleClear = () => {
         clearFilters();
         setFilters(getFilters());
@@ -45,7 +44,9 @@ export default function SearchComponent() {
                 <TbReportSearch size="30"/>
                 <h3 className="font-bold text-2xl">Buscador de registros.</h3>
             </div>
-            <Button color="success" variant="flat" className="px-8" onClick={getAllFertilisation}>Crear
+            <Button color="success" variant="flat" className="px-8" onClick={()=>{
+                navigate("/animal/create")
+            }}>Crear
                 nuevo</Button>
         </div>
         <div className="flex gap-2 items-center h-16">
@@ -156,7 +157,7 @@ export default function SearchComponent() {
                     </div>)
                 })}
             </div>
-            <Button color="danger" variant="flat" isDisabled={lengthFilters()} onClick={handleClear}
+            <Button color="danger" variant="flat" isDisabled={isEmpty(filters)} onClick={handleClear}
                     className="min-h-full">Limpiar</Button>
         </div>
     </section>)

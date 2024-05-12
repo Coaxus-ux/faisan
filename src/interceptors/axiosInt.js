@@ -36,9 +36,7 @@ axiosInstance.interceptors.response.use(
             }
             localStorage.setItem('tryRefresh', '0');
             refreshToken();
-
         }
-        console.error(error);
         notify(error.response.data.message, 'error');
         return Promise.reject(error);
     },
@@ -56,7 +54,6 @@ const refreshToken = async () => {
         localStorage.setItem('refreshToken', response.data.refreshToken);
         window.location.reload();
     } catch (error) {
-        console.error(error);
         localStorage.setItem('tryRefresh', '1');
     }
 };
