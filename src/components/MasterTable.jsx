@@ -84,12 +84,12 @@ export default function MasterTable({columns, data}) {
             case "actions":
                 return (
                     <div className="relative flex items-center gap-2">
-                        <Tooltip content="Details">
+                        <Tooltip content="Detalles">
                           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                             <FaEye/>
                           </span>
                         </Tooltip>
-                        <Tooltip content="Edit user">
+                        <Tooltip content="Editar registro">
                           <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                             <MdEdit/>
                           </span>

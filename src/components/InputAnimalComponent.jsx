@@ -6,10 +6,12 @@ import {useFertilisationStore} from "@/store/FertilisationStore";
 import {useColorsStore} from "@/store/ColorsStore.js";
 import {useEffect, useState} from "react";
 import {useAnimalStore} from "@/store/AnimalStore.js";
+import {useParentsStore} from "@/store/ParentsStore.js";
 import {notify} from "@/hooks/notify.jsx";
-import {CalendarDate, parseDate} from "@internationalized/date";
+import {parseDate} from "@internationalized/date";
 import PropTypes from 'prop-types';
 import {isEmpty} from "@/utils/objectLength";
+
 InputAnimalComponent.propTypes = {
     animalUpdate: PropTypes.object
 }
@@ -17,7 +19,7 @@ export default function InputAnimalComponent(animalUpdate) {
     const [isMounted, setIsMounted] = useState(false);
     const {getAllFertilisation, getFertilisations} = useFertilisationStore();
     const {createAnimal, getIsResolving} = useAnimalStore();
-
+    const {getParentsApi, getMothers, getFathers} = useParentsStore();
     const [animal, setAnimal] = useState({
         name: "",
         animalFarmNumber: "",
@@ -25,7 +27,9 @@ export default function InputAnimalComponent(animalUpdate) {
         animalBirthDate: "",
         fertilisationType: "",
         animalColor: "",
-        animalSex: ""
+        animalSex: "",
+        animalFather: "",
+        animalMother: ""
     });
 
     const {getColorsApi, getColors} = useColorsStore();
@@ -33,10 +37,18 @@ export default function InputAnimalComponent(animalUpdate) {
         if (!isMounted) {
             getAllFertilisation();
             getColorsApi();
+            getParentsApi();
+            setIsMounted(true);
             if (animalUpdate) {
                 setAnimal(animalUpdate);
+                return;
             }
-            setIsMounted(true);
+            setAnimal(
+                {
+                    ...animal,
+                    animalBirthDate: `${dateNow.getFullYear()}-${padTo2Digits(dateNow.getMonth() + 1)}-${padTo2Digits(dateNow.getDate())}T00:00:00.000Z`
+                }
+            )
         }
         // eslint-disable-next-line
     }, []);
@@ -45,7 +57,7 @@ export default function InputAnimalComponent(animalUpdate) {
         if (!Object.prototype.hasOwnProperty.call(e, "target")) {
             setAnimal({
                 ...animal,
-                animalBirthDate: `${e.year}-${e.month}-${e.day}T00:00:00.000Z`
+                animalBirthDate: `${e.year}-${padTo2Digits(e.month)}-${padTo2Digits(e.day)}T00:00:00.000Z`
             })
             return;
         }
@@ -73,10 +85,11 @@ export default function InputAnimalComponent(animalUpdate) {
         return num.toString().padStart(2, '0');
     }
 
+    const dateNow = new Date();
     const getDate = () => {
         try {
             if (isEmpty(animalUpdate)) {
-                const dateNow = new Date();
+
                 return `${dateNow.getFullYear()}-${padTo2Digits(dateNow.getMonth() + 1)}-${padTo2Digits(dateNow.getDate())}`;
             }
             const {animalBirthDate} = animal;
@@ -100,15 +113,17 @@ export default function InputAnimalComponent(animalUpdate) {
                     <div className="flex gap-2">
                         <Input isRequired type="text" variant="flat" label="Nombre del animal" name="name"
                                onChange={onHandleChange}
-                               value={animal.name}
+                               value={animal.name || ""}
                         />
                         <Input isRequired type="text" variant="flat" label="Numero del animal" name="animalFarmNumber"
-                               onChange={onHandleChange}/>
+                               onChange={onHandleChange}
+                               value={animal.animalFarmNumber || ""}
+                        />
                     </div>
                     <div className="flex gap-2">
                         <Input type="text" variant="flat" label="Numero FEDEGAN" name="animalFEDGAN"
                                onChange={onHandleChange}
-                               value={animal.animalFEDGAN}
+                               value={animal.animalFEDGAN || ""}
                         />
                         <DateInput
                             isRequired
@@ -116,7 +131,6 @@ export default function InputAnimalComponent(animalUpdate) {
                             onChange={onHandleChange}
                             name="animalBirthDate"
                             defaultValue={parseDate(getDate())}
-                            // defaultValue={parseDate("2024-04-12")}
                         />
                     </div>
                     <div className="flex gap-2 justify-center">
@@ -131,7 +145,6 @@ export default function InputAnimalComponent(animalUpdate) {
                                     setAnimal({
                                         ...animal, fertilisationType: e
                                     });
-
                                 }
                             }
                         >
@@ -169,6 +182,50 @@ export default function InputAnimalComponent(animalUpdate) {
                         >
                             <AutocompleteItem key="Macho">Macho</AutocompleteItem>
                             <AutocompleteItem key="Hembra">Hembra</AutocompleteItem>
+                        </Autocomplete>
+                    </div>
+                    <div className="flex gap-2">
+                        <Autocomplete
+                            label="Padre"
+                            name="animalFather"
+                            defaultItems={getFathers()}
+                            onKeyDown={(e) => e.continuePropagation()}
+                            onSelectionChange={
+                                (e) => {
+                                    setAnimal({
+                                        ...animal, animalFather: e
+                                    });
+                                }
+                            }
+                        >
+                            {(item) => {
+                                let itemString = `${item.parent.name} - ${item.parent.animalFarmNumber}`
+                                return <AutocompleteItem key={item.father.id}>
+                                    {itemString}
+                                </AutocompleteItem>
+                            }
+                            }
+                        </Autocomplete>
+                        <Autocomplete
+                            label="Madre"
+                            name="animalMother"
+                            defaultItems={getMothers()}
+                            onKeyDown={(e) => e.continuePropagation()}
+                            onSelectionChange={
+                                (e) => {
+                                    setAnimal({
+                                        ...animal, animalMother: e
+                                    });
+                                }
+                            }
+                        >
+                            {(item) => {
+                                let itemString = `${item.parent.name} - ${item.parent.animalFarmNumber}`
+                                return <AutocompleteItem key={item.mother.id}>
+                                    {itemString}
+                                </AutocompleteItem>
+                            }
+                            }
                         </Autocomplete>
                     </div>
 
