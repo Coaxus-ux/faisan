@@ -5,6 +5,7 @@ import {notify} from "@/hooks/notify";
 
 export const useAnimalStore = create((set, get) => ({
     animals: [],
+    animal: {},
     isResolving: false,
     getAnimalsApi: async () => {
         await axiosInstance.post('/animal/all', {
@@ -37,6 +38,18 @@ export const useAnimalStore = create((set, get) => ({
             set({isResolving: false})
         });
     },
-    getIsResolving: () => get().isResolving
+    getIsResolving: () => get().isResolving,
+    getAnimalById: async (id) => {
+        set({isResolving: true})
+        await axiosInstance.post('/animal/getAnimalById', {
+            userOwner: getUserId(),
+            animalId: id
+        }).then((response) => {
+            set({animal: response.data.singleAnimal})
+        }).finally(() => {
+            set({isResolving: false})
+        })
+    },
+    getAnimal: () => get().animal,
 }))
 

@@ -4,6 +4,7 @@ import {
 } from "@nextui-org/react";
 import {FaEye} from "react-icons/fa";
 import {MdEdit} from "react-icons/md";
+import {useNavigate} from "react-router-dom";
 import {format, differenceInCalendarDays, differenceInCalendarMonths, differenceInCalendarYears} from 'date-fns';
 import {es} from 'date-fns/locale/es';
 import PropTypes from 'prop-types';
@@ -16,6 +17,7 @@ export default function MasterTable({columns, data}) {
     const [page, setPage] = React.useState(1);
     const rowsPerPage = 5;
     const pages = Math.ceil(data.length / rowsPerPage);
+    const navigate = useNavigate();
 
     const dataSorted = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
@@ -89,8 +91,10 @@ export default function MasterTable({columns, data}) {
                             <FaEye/>
                           </span>
                         </Tooltip>
-                        <Tooltip content="Editar registro">
-                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                        <Tooltip content="Editar registro" o>
+                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={()=> {
+                            navigate(`/animal/edit/${animal.id}`)
+                        }}>
                             <MdEdit/>
                           </span>
                         </Tooltip>

@@ -15,7 +15,7 @@ import {isEmpty} from "@/utils/objectLength";
 InputAnimalComponent.propTypes = {
     animalUpdate: PropTypes.object
 }
-export default function InputAnimalComponent(animalUpdate) {
+export default function InputAnimalComponent({animalUpdate}) {
     const [isMounted, setIsMounted] = useState(false);
     const {getAllFertilisation, getFertilisations} = useFertilisationStore();
     const {createAnimal, getIsResolving} = useAnimalStore();
@@ -40,7 +40,19 @@ export default function InputAnimalComponent(animalUpdate) {
             getParentsApi();
             setIsMounted(true);
             if (animalUpdate) {
-                setAnimal(animalUpdate);
+                setAnimal(
+                    {
+                        name: animalUpdate.name,
+                        animalFarmNumber: animalUpdate.animalFarmNumber,
+                        animalFEDGAN: animalUpdate.animalFEDGAN,
+                        animalBirthDate: animalUpdate.animalBirthDate,
+                        fertilisationType: animalUpdate.fertilisationType.id,
+                        animalColor: animalUpdate.animalColor,
+                        animalSex: animalUpdate.animalSex,
+                        animalFather: animalUpdate.animalFather,
+                        animalMother: animalUpdate.animalMother
+                    }
+                );
                 return;
             }
             setAnimal(
@@ -78,7 +90,8 @@ export default function InputAnimalComponent(animalUpdate) {
         //createAnimal(animal)
     };
     const onHandleBack = () => {
-        window.history.back();
+        console.log(animal);
+        /*window.history.back();*/
     }
 
     function padTo2Digits(num) {
