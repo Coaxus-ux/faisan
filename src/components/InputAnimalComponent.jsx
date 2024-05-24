@@ -11,60 +11,52 @@ import {notify} from "@/hooks/notify.jsx";
 import {parseDate} from "@internationalized/date";
 import PropTypes from 'prop-types';
 import {isEmpty} from "@/utils/objectLength";
+import {SAanimal} from "@/utils/columns";
 
 InputAnimalComponent.propTypes = {
     animalUpdate: PropTypes.object
 }
-export default function InputAnimalComponent({animalUpdate}) {
-    const [isMounted, setIsMounted] = useState(false);
-    const {getAllFertilisation, getFertilisations} = useFertilisationStore();
-    const {createAnimal, getIsResolving} = useAnimalStore();
-    const {getParentsApi, getMothers, getFathers} = useParentsStore();
-    const [animal, setAnimal] = useState({
-        name: "",
-        animalFarmNumber: "",
-        animalFEDGAN: "",
-        animalBirthDate: "",
-        fertilisationType: "",
-        animalColor: "",
-        animalSex: "",
-        animalFather: "",
-        animalMother: ""
-    });
 
+export default function InputAnimalComponent({animalUpdate}) {
+    const {getAllFertilisation, getFertilisations} = useFertilisationStore();
+    const {createAnimal, getIsResolving, updateAnimal} = useAnimalStore();
+    const {getParentsApi, getMothers, getFathers} = useParentsStore();
+    const [animal, setAnimal] = useState(SAanimal);
     const {getColorsApi, getColors} = useColorsStore();
+
     useEffect(() => {
-        if (!isMounted) {
-            getAllFertilisation();
-            getColorsApi();
-            getParentsApi();
-            setIsMounted(true);
-            if (animalUpdate) {
-                setAnimal(
-                    {
-                        name: animalUpdate.name,
-                        animalFarmNumber: animalUpdate.animalFarmNumber,
-                        animalFEDGAN: animalUpdate.animalFEDGAN,
-                        animalBirthDate: animalUpdate.animalBirthDate,
-                        fertilisationType: animalUpdate.fertilisationType.id,
-                        animalColor: animalUpdate.animalColor,
-                        animalSex: animalUpdate.animalSex,
-                        animalFather: animalUpdate.animalFather,
-                        animalMother: animalUpdate.animalMother
-                    }
-                );
-                return;
+        getAllFertilisation();
+        getColorsApi();
+        getParentsApi();
+
+        if (animalUpdate) {
+            const {animalMother, animalFather, ...rest} = animalUpdate;
+            const updatedAnimal = {
+                name: rest.name,
+                animalFarmNumber: rest.animalFarmNumber,
+                animalFEDGAN: rest.animalFEDGAN,
+                animalBirthDate: rest.animalBirthDate,
+                fertilisationType: rest.fertilisationType.id,
+                animalColor: rest.animalColor.id,
+                animalSex: rest.animalSex,
+            };
+
+            if (animalMother) {
+                updatedAnimal.animalMother = animalMother.id;
             }
-            setAnimal(
-                {
-                    ...animal,
-                    animalBirthDate: `${dateNow.getFullYear()}-${padTo2Digits(dateNow.getMonth() + 1)}-${padTo2Digits(dateNow.getDate())}T00:00:00.000Z`
-                }
-            )
+
+            if (animalFather) {
+                updatedAnimal.animalFather = animalFather.id;
+            }
+
+            setAnimal(updatedAnimal);
         }
-        // eslint-disable-next-line
-    }, []);
-    const animalProperties = Object.values(animal);
+
+        return () => {
+            setAnimal(SAanimal);
+        };
+    }, [animalUpdate]);
+
     const onHandleChange = (e) => {
         if (!Object.prototype.hasOwnProperty.call(e, "target")) {
             setAnimal({
@@ -77,49 +69,58 @@ export default function InputAnimalComponent({animalUpdate}) {
             ...animal, [e.target.name]: e.target.value
         });
     };
+
     const onHandleCreate = () => {
-        if (!animalProperties.every(propety => propety !== "")) {
-            notify("Por favor llene todos los campos", "error");
-            return;
+        for (const key of Object.keys(animal)) {
+            if (animal[key] === "" || animal[key] === null || animal[key] === undefined) {
+                if (key !== "animalFEDGAN" && key !== "animalFather" && key !== "animalMother") {
+                    notify("Por favor llene todos los campos", "error");
+                    return;
+                }
+            }
         }
-        if (isEmpty(animalUpdate)) {
+
+        if (!animalUpdate) {
             createAnimal(animal);
             return;
         }
 
-        //createAnimal(animal)
+        updateAnimal(animal, animalUpdate.id)
     };
+
     const onHandleBack = () => {
-        console.log(animal);
-        /*window.history.back();*/
+        window.history.back();
     }
 
     function padTo2Digits(num) {
         return num.toString().padStart(2, '0');
     }
 
-    const dateNow = new Date();
     const getDate = () => {
+        const dateNow = new Date();
         try {
-            if (isEmpty(animalUpdate)) {
-
-                return `${dateNow.getFullYear()}-${padTo2Digits(dateNow.getMonth() + 1)}-${padTo2Digits(dateNow.getDate())}`;
+            if (!animalUpdate || !animalUpdate.animalBirthDate) {
+                const dateToPrint = `${dateNow.getFullYear()}-${padTo2Digits(dateNow.getMonth() + 1)}-${padTo2Digits(dateNow.getDate())}`;
+                animal.animalBirthDate = `${dateToPrint}T00:00:00.000Z`;
+                return dateToPrint;
             }
-            const {animalBirthDate} = animal;
-            if (animalBirthDate !== "") {
-                return parseDate("2024-04-12")
-            }
+            const {animalBirthDate} = animalUpdate;
+            const dateToPrint = animalBirthDate.split('T')[0];
+            return dateToPrint;
         } catch (e) {
             console.log(e);
+            return `${dateNow.getFullYear()}-${padTo2Digits(dateNow.getMonth() + 1)}-${padTo2Digits(dateNow.getDate())}`;
         }
-    }
+    };
+
     return (
         <section className="flex justify-center items-center h-lvh gap-4">
             <Card className="p-4">
                 <CardHeader>
                     <div className="flex gap-2 items-center">
                         <VscGitPullRequestCreate size="30"/>
-                        <h3 className="font-bold text-2xl">Crear Animal</h3>
+
+                        <h3 className="font-bold text-2xl"> {animalUpdate ? "Editar Animal" : "Crear Animal"}</h3>
                     </div>
                 </CardHeader>
                 <CardBody className="flex justify-center gap-2 p-8">
@@ -140,9 +141,10 @@ export default function InputAnimalComponent({animalUpdate}) {
                         />
                         <DateInput
                             isRequired
-                            label="Birth date"
+                            label="Fecha de nacimiento"
                             onChange={onHandleChange}
                             name="animalBirthDate"
+                            granularity="day"
                             defaultValue={parseDate(getDate())}
                         />
                     </div>
@@ -153,6 +155,7 @@ export default function InputAnimalComponent({animalUpdate}) {
                             name="fertilisationType"
                             onKeyDown={(e) => e.continuePropagation()}
                             isRequired
+                            selectedKey={animal.fertilisationType}
                             onSelectionChange={
                                 (e) => {
                                     setAnimal({
@@ -169,6 +172,7 @@ export default function InputAnimalComponent({animalUpdate}) {
                             name="animalColor"
                             isRequired
                             onKeyDown={(e) => e.continuePropagation()}
+                            selectedKey={animal.animalColor}
                             onSelectionChange={
                                 (e) => {
                                     setAnimal({
@@ -185,6 +189,7 @@ export default function InputAnimalComponent({animalUpdate}) {
                             name="animalSex"
                             isRequired
                             onKeyDown={(e) => e.continuePropagation()}
+                            selectedKey={animal.animalSex}
                             onSelectionChange={
                                 (e) => {
                                     setAnimal({
@@ -203,6 +208,7 @@ export default function InputAnimalComponent({animalUpdate}) {
                             name="animalFather"
                             defaultItems={getFathers()}
                             onKeyDown={(e) => e.continuePropagation()}
+                            selectedKey={animal.animalFather}
                             onSelectionChange={
                                 (e) => {
                                     setAnimal({
@@ -224,6 +230,7 @@ export default function InputAnimalComponent({animalUpdate}) {
                             name="animalMother"
                             defaultItems={getMothers()}
                             onKeyDown={(e) => e.continuePropagation()}
+                            selectedKey={animal.animalMother}
                             onSelectionChange={
                                 (e) => {
                                     setAnimal({

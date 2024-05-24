@@ -38,6 +38,11 @@ export default function Login() {
             [e.target.name]: e.target.value,
         });
     };
+    const keyPress = (e) => {
+        if (e.key === "Enter") {
+            loginHandler();
+        }
+    };
     const toggleVisibility = () => setIsVisible(!isVisible);
     return (
         <section className="bg-white">
@@ -76,6 +81,7 @@ export default function Login() {
 
                             <div className="col-span-6">
                                 <Input
+                                    onKeyDown={keyPress}
                                     label="Contraseña"
                                     name="password"
                                     endContent={

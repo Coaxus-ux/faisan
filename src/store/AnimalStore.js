@@ -51,5 +51,18 @@ export const useAnimalStore = create((set, get) => ({
         })
     },
     getAnimal: () => get().animal,
+    updateAnimal: async (animal, animalId) => {
+        set({isResolving: true})
+        await axiosInstance.post('/animal/update', {
+            userOwner: getUserId(),
+            animalId: animalId,
+            animalStatus: true,
+            ...animal
+        }).then(() => {
+            notify("Animal actualizado exitosamente");
+        }).finally(() => {
+            set({isResolving: false})
+        });
+    }
 }))
 

@@ -9,6 +9,7 @@ import {format, differenceInCalendarDays, differenceInCalendarMonths, difference
 import {es} from 'date-fns/locale/es';
 import PropTypes from 'prop-types';
 import Dot from "@/components/Dot";
+
 MasterTable.propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
@@ -28,13 +29,20 @@ export default function MasterTable({columns, data}) {
     const dateNow = new Date();
     const renderCell = React.useCallback((animal, columnKey) => {
         const months = differenceInCalendarMonths(dateNow, new Date(animal.animalBirthDate)) % 12
-        const days = differenceInCalendarDays(dateNow, new Date(animal.animalBirthDate)) % 30 - 1
+        let days = differenceInCalendarDays(dateNow, new Date(animal.animalBirthDate)) % 30 - 1
+        days < 0 ? days = 0 : days
         const years = differenceInCalendarYears(dateNow, new Date(animal.animalBirthDate))
         switch (columnKey) {
             case "animal_number":
                 return (
                     <div className="flex flex-col">
                         <p className="text-bold capitalize">{animal.animalFarmNumber}</p>
+                    </div>
+                );
+            case "name":
+                return (
+                    <div className="flex flex-col">
+                        <p className="text-bold capitalize">{animal.name}</p>
                     </div>
                 );
             case "animalFEDGAN":
@@ -46,15 +54,13 @@ export default function MasterTable({columns, data}) {
             case "animalColor":
                 return (
                     <div className="flex gap-1 items-center">
-                        <Dot color={animal.animalColor.animalHex} />
+                        <Dot color={animal.animalColor.animalHex}/>
                         {animal.animalColor.animalColor}
                     </div>
                 );
             case "animal_sex":
                 return (
-
                     <p className="text-bold capitalize">{animal.animalSex}</p>
-
                 );
             case "birth_date":
                 return (
@@ -92,9 +98,9 @@ export default function MasterTable({columns, data}) {
                           </span>
                         </Tooltip>
                         <Tooltip content="Editar registro" o>
-                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={()=> {
-                            navigate(`/animal/edit/${animal.id}`)
-                        }}>
+                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => {
+                              navigate(`/animal/edit/${animal.id}`)
+                          }}>
                             <MdEdit/>
                           </span>
                         </Tooltip>
