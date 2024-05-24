@@ -10,7 +10,6 @@ import {useParentsStore} from "@/store/ParentsStore.js";
 import {notify} from "@/hooks/notify.jsx";
 import {parseDate} from "@internationalized/date";
 import PropTypes from 'prop-types';
-import {isEmpty} from "@/utils/objectLength";
 import {SAanimal} from "@/utils/columns";
 
 InputAnimalComponent.propTypes = {
@@ -82,10 +81,13 @@ export default function InputAnimalComponent({animalUpdate}) {
 
         if (!animalUpdate) {
             createAnimal(animal);
+            setAnimal(SAanimal)
             return;
         }
 
-        updateAnimal(animal, animalUpdate.id)
+        updateAnimal(animal, animalUpdate.id).then(() => {
+            window.history.back();
+        });
     };
 
     const onHandleBack = () => {

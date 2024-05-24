@@ -6,7 +6,7 @@ export const TIanimal = [
     {name: "FECHA NACIMIENTO", uid: "birth_date"},
     {name: "FECUNDACIÓN", uid: "animal_birth_type"},
     {name: "COLOR", uid: "animalColor"},
-    {name: "ACTIONS", uid: "actions"},
+    {name: "ACCIONES", uid: "actions"},
 ];
 export const SAanimal = {
     name: "",

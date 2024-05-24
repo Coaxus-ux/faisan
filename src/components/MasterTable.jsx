@@ -2,14 +2,13 @@ import React from "react";
 import {
     Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Tooltip, Chip, Pagination
 } from "@nextui-org/react";
-import {FaEye} from "react-icons/fa";
+import {FaEye, FaWeight} from "react-icons/fa";
 import {MdEdit} from "react-icons/md";
 import {useNavigate} from "react-router-dom";
 import {format, differenceInCalendarDays, differenceInCalendarMonths, differenceInCalendarYears} from 'date-fns';
 import {es} from 'date-fns/locale/es';
 import PropTypes from 'prop-types';
 import Dot from "@/components/Dot";
-
 MasterTable.propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
@@ -104,11 +103,17 @@ export default function MasterTable({columns, data}) {
                             <MdEdit/>
                           </span>
                         </Tooltip>
+                        <Tooltip content="Pesos">
+                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                <FaWeight/>
+                            </span>
+                        </Tooltip>
                     </div>
                 );
             default:
                 return null;
         }
+        // eslint-disable-next-line
     }, []);
     return (<Table
 
