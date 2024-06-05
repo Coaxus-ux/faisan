@@ -1,7 +1,7 @@
 import {create} from 'zustand'
 import axios from "axios";
 export const useLoginStore = create((set, get) => ({
-    isLogged: false,
+    isLogged: localStorage.getItem('token') !== null,
     isLoading: false,
     login: async (email, password, rememberMe) => {
         set({isLoading: true})
@@ -29,6 +29,6 @@ export const useLoginStore = create((set, get) => ({
         localStorage.removeItem('token')
         localStorage.removeItem('refreshToken')
         set({isLogged: false})
-        window.location.reload()
+        window.location.href = '/auth/login'
     },
 }))

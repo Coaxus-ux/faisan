@@ -9,6 +9,7 @@ import {format, differenceInCalendarDays, differenceInCalendarMonths, difference
 import {es} from 'date-fns/locale/es';
 import PropTypes from 'prop-types';
 import Dot from "@/components/Dot";
+
 MasterTable.propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
@@ -104,7 +105,11 @@ export default function MasterTable({columns, data}) {
                           </span>
                         </Tooltip>
                         <Tooltip content="Pesos">
-                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={
+                                () => {
+                                    navigate(`/animal/weighs/${animal.id}`)
+                                }
+                            }>
                                 <FaWeight/>
                             </span>
                         </Tooltip>

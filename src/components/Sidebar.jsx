@@ -5,10 +5,12 @@ import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, User} fro
 import {HiDotsHorizontal} from "react-icons/hi";
 import { FaScrewdriver } from "react-icons/fa";
 import {useEffect} from "react";
+import {useLoginStore} from "@/store/LoginStore";
 import {useResponsive} from "@/store/ResponseStore.js";
 
 export default function Sidebar() {
     const {getState, isOpen} = useResponsive();
+    const {logout} = useLoginStore();
     const routes = [{
         path: "/dashboard", name: "General", icon: <RxDashboard size="12"/>,
     }, {
@@ -29,6 +31,9 @@ export default function Sidebar() {
             document.getElementById('sidebar').classList.add('hidden');
         }
     }, [isOpen, getState]);
+    const onHandleLogout = () => {
+        logout();
+    }
     return (<>
         <aside id="sidebar"
                className="flex fixed top-0 left-0 flex-col flex-shrink-0 w-64 h-full duration-200 transition-width z-40 lg:flex"
@@ -76,7 +81,7 @@ export default function Sidebar() {
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Static Actions">
                             <DropdownItem key="new">Configuración</DropdownItem>
-                            <DropdownItem key="delete" className="text-danger" color="danger">
+                            <DropdownItem key="delete" className="text-danger" color="danger" onClick={onHandleLogout}>
                                 Salir
                             </DropdownItem>
                         </DropdownMenu>

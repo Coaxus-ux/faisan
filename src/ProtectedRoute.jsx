@@ -6,12 +6,12 @@ import Navbar from "@/components/Navbar";
 export default function ProtectedRoute() {
     const {getIsLogged} = useLoginStore();
     const navigate = useNavigate();
-    /*useEffect(() => {
+    useEffect(() => {
         console.log(getIsLogged);
         if (!getIsLogged()) {
             navigate("/auth/login");
         }
-    }, [navigate]);*/
+    }, [navigate]);
     return (
         <>
             <Navbar/>

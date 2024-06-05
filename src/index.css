@@ -106,3 +106,28 @@ input[type=color] {
     display: block;
     background: none;
 }
+#scrollWeight::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+#scrollWeight::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+#scrollWeight::-webkit-scrollbar-button:increment,.contenedor::-webkit-scrollbar-button {
+    display: none;
+}
+
+#scrollWeight::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+#scrollWeight::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+
+#scrollWeight::-webkit-scrollbar-track {
+    border-radius: 10px;
+}

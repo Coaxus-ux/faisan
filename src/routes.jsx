@@ -8,15 +8,14 @@ const Token = lazy(() => import('./pages/Auth/Token.jsx'));
 const Page404 = lazy(() => import('./pages/Page404.jsx'));
 const Dashboard = lazy(() => import('./pages/Animal/Dashboard.jsx'));
 const ProtectedRoute = lazy(() => import('./ProtectedRoute.jsx'));
-// const AnimalPanel = lazy(() => import('./pages/Animal/AnimalPanel.jsx'));
 const Females = lazy(() => import('./pages/Animal/Females.jsx'));
 const Males = lazy(() => import('./pages/Animal/Males.jsx'));
 const Tools = lazy(() => import('./pages/Tools/Tools.jsx'));
 const Colors = lazy(() => import('./pages/Tools/Colors.jsx'));
 const CreateAnimal = lazy(() => import('./pages/Animal/CreateAnimal.jsx'));
 const EditRegister = lazy(() => import('./pages/Animal/EditRegister.jsx'));
+const Weights = lazy(() => import('./pages/Animal/Weights.jsx'));
 export const routes = [
-
         {
             path: '/auth/login',
             element: <Login/>
@@ -60,6 +59,10 @@ export const routes = [
                 {
                     path: '/animal/edit/:animalId',
                     element: <EditRegister/>
+                },
+                {
+                    path: '/animal/weighs/:animalId',
+                    element: <Weights/>
                 }
             ]
 
