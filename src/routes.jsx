@@ -15,6 +15,7 @@ const Colors = lazy(() => import('./pages/Tools/Colors.jsx'));
 const CreateAnimal = lazy(() => import('./pages/Animal/CreateAnimal.jsx'));
 const EditRegister = lazy(() => import('./pages/Animal/EditRegister.jsx'));
 const Weights = lazy(() => import('./pages/Animal/Weights.jsx'));
+const AnimalDetails = lazy(() => import('./pages/Animal/AnimalDetails.jsx'));
 export const routes = [
         {
             path: '/auth/login',
@@ -63,6 +64,10 @@ export const routes = [
                 {
                     path: '/animal/weighs/:animalId',
                     element: <Weights/>
+                },
+                {
+                    path: '/animal/details/:animalId',
+                    element: <AnimalDetails/>
                 }
             ]
 

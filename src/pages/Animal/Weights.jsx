@@ -19,6 +19,7 @@ export default function Weights() {
         getWeightAPI(animalId);
     }, [animalId, saveWeightAPI]);
     const onHandleSave = () => {
+
         for (const key in weight2Save) {
             if (weight2Save[key] === "") {
                 notify("Por favor llene todos los campos", "error");
