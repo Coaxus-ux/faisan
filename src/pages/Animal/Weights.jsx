@@ -63,7 +63,7 @@ export default function Weights() {
                     <ScrollShadow className="flex flex-col h-96 w-96" id="scrollWeight">
                         {
                             getWeights().map((weight) => (
-                                <WeightComponent key={weight.id} weight={weight}/>
+                                <WeightComponent key={weight.id} weight={weight} showEdit={true}/>
                             ))
                         }
                     </ScrollShadow>

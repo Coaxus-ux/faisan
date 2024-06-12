@@ -8,9 +8,10 @@ import classNames from "classnames";
 import EditWeightModal from "@/components/EditWeightModal.jsx";
 
 WeightComponent.propTypes = {
-    weight: Props.object.isRequired
+    weight: Props.object.isRequired,
+    showEdit: Props.bool
 }
-export default function WeightComponent({weight}) {
+export default function WeightComponent({weight, showEdit}) {
 
     const weightChangeController = (weightChange) => {
         if (weightChange < 0) return <BsArrowDown/>;
@@ -18,7 +19,7 @@ export default function WeightComponent({weight}) {
         return <LiaBalanceScaleSolid/>;
     }
     return (
-        <div className="min-h-52 ">
+        <div className="min-h-52 w-full">
             <div className="p-6 grid gap-4">
                 <div className="flex items-center justify-between">
                     <div className="text-4xl font-bold">
@@ -45,9 +46,14 @@ export default function WeightComponent({weight}) {
                         {weight.weighingDescription}
                     </p>
                 </ScrollShadow>
-                <div className="flex justify-end">
-                    <EditWeightModal weight={weight}/>
-                </div>
+                {
+                    showEdit && (
+                        <div className="flex justify-end">
+                            <EditWeightModal weight={weight}/>
+                        </div>
+                    )
+                }
+
             </div>
         </div>
     )

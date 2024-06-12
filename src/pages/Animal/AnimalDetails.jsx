@@ -1,7 +1,7 @@
 import {useParams} from "react-router-dom";
 import WeightTable from "@/components/WeightTable.jsx";
 import WeightChart from "@/components/WeightChart.jsx";
-import {Tabs, Tab, Card, CardBody, Button} from "@nextui-org/react";
+import {Tabs, Tab, Card, CardBody, Button, ScrollShadow} from "@nextui-org/react";
 import {MdOutlineTableChart} from "react-icons/md";
 import {GiChart} from "react-icons/gi";
 import AnimalDetailsCard from "@/components/AnimalDetailsCard.jsx";
@@ -9,6 +9,7 @@ import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useAnimalStore} from "@/store/AnimalStore.js";
 import Loader from "@/components/Loader.jsx";
+import WeightComponent from "../../components/weightComponent.jsx";
 
 export default function AnimalDetails() {
     const {animalId} = useParams();
@@ -22,8 +23,7 @@ export default function AnimalDetails() {
     }, [animalId]);
 
     const onHandleClick = (e) => {
-        console.log(animal)
-        /*navigate(e.target.dataset.site + animalId);*/
+        navigate(e.target.dataset.site + animalId);
     };
     return (
 
@@ -52,25 +52,31 @@ export default function AnimalDetails() {
                             </div>
                         </div>
                         <div className="grid md:grid-cols-2 gap-6">
-                            <AnimalDetailsCard animal={animal} />
+                            <AnimalDetailsCard animal={animal}/>
                             <Card className="p-5">
                                 <CardBody className="flex items-center">
-                                    <Tabs aria-label="Options" color="primary" variant="bordered">
+                                    <Tabs aria-label="Options" color="success">
                                         <Tab title={
                                             <div className="flex items-center space-x-2">
                                                 <MdOutlineTableChart/>
                                                 <span>Pesos</span>
                                             </div>
-                                        }>
-                                            <WeightTable/>
+                                        } className="w-full h-full items-center justify-center flex flex-col">
+                                            <ScrollShadow className="flex flex-col h-96 w-96" id="scrollWeight">
+                                                {
+                                                    animal.weights.map((weight) => {
+                                                        return <WeightComponent key={weight.id} weight={weight} showEdit={false}/>
+                                                    })
+                                                }
+                                            </ScrollShadow>
                                         </Tab>
                                         <Tab title={
                                             <div className="flex items-center space-x-2">
                                                 <GiChart/>
                                                 <span>Grafico</span>
                                             </div>
-                                        }>
-                                            <WeightChart/>
+                                        } className="w-full h-full items-center justify-center flex">
+                                            <WeightChart animalWeights={animal.weights}/>
                                         </Tab>
                                     </Tabs>
                                 </CardBody>
