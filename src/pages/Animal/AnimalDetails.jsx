@@ -1,5 +1,4 @@
 import {useParams} from "react-router-dom";
-import WeightTable from "@/components/WeightTable.jsx";
 import WeightChart from "@/components/WeightChart.jsx";
 import {Tabs, Tab, Card, CardBody, Button, ScrollShadow} from "@nextui-org/react";
 import {MdOutlineTableChart} from "react-icons/md";
@@ -62,11 +61,19 @@ export default function AnimalDetails() {
                                                 <span>Pesos</span>
                                             </div>
                                         } className="w-full h-full items-center justify-center flex flex-col">
+
                                             <ScrollShadow className="flex flex-col h-96 w-96" id="scrollWeight">
                                                 {
-                                                    animal.weights.map((weight) => {
-                                                        return <WeightComponent key={weight.id} weight={weight} showEdit={false}/>
-                                                    })
+                                                    animal.weights.length === 0 ? (
+                                                            <div className="flex items-center justify-center">
+                                                        <span
+                                                            className="text-2xl text-gray-500">No hay pesos registrados</span>
+                                                            </div>
+                                                        ) :
+                                                        animal.weights.map((weight) => {
+                                                            return <WeightComponent key={weight.id} weight={weight}
+                                                                                    showEdit={false}/>
+                                                        })
                                                 }
                                             </ScrollShadow>
                                         </Tab>

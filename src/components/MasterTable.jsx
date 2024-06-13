@@ -84,7 +84,10 @@ export default function MasterTable({columns, data}) {
                         {animal.fertilisationType.typeFertilisation === "Inseminación" ?
                             <Chip color="warning" variant="flat">{animal.fertilisationType.typeFertilisation}</Chip>
                             :
-                            <Chip color="success" variant="flat">{animal.fertilisationType.typeFertilisation}</Chip>
+                            animal.fertilisationType.typeFertilisation === "Monta normal" ?
+                                <Chip color="success" variant="flat">{animal.fertilisationType.typeFertilisation}</Chip>
+                                :
+                                <Chip color="primary" variant="flat">{animal.fertilisationType.typeFertilisation}</Chip>
                         }
 
                     </>
@@ -93,7 +96,7 @@ export default function MasterTable({columns, data}) {
                 return (
                     <div className="relative flex items-center gap-2">
                         <Tooltip content="Detalles">
-                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={()=>{
+                          <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => {
                               navigate(`/animal/details/${animal.id}`)
                           }}>
                             <FaEye/>
