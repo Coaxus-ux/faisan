@@ -150,6 +150,7 @@ export default function InputAnimalComponent({animalUpdate}) {
                             defaultValue={parseDate(getDate())}
                         />
                     </div>
+
                     <div className="flex gap-2 justify-center">
                         <Autocomplete
                             label="Tipo de nacimiento"
@@ -203,6 +204,11 @@ export default function InputAnimalComponent({animalUpdate}) {
                             <AutocompleteItem key="Macho">Macho</AutocompleteItem>
                             <AutocompleteItem key="Hembra">Hembra</AutocompleteItem>
                         </Autocomplete>
+                    </div>
+                    <div>
+                        <p>
+                            Datos de los padres
+                        </p>
                     </div>
                     <div className="flex gap-2">
                         <Autocomplete
