@@ -31,7 +31,7 @@ export default function AnimalDetailsCard({animal}) {
                 <div>
                     <p className="font-bold">Nacimiento</p>
                     <p className="italic">{animal.animalBirthDate.split("T")[0]}</p>
-                    <span className="italic">{years} años {months} meses {days} días</span>
+                    <span className="italic text-sm text-gray-400">{years} años {months} meses {days} días</span>
                 </div>
                 <div>
                     <p className="font-bold">FEDEGAN</p>

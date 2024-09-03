@@ -11,6 +11,9 @@ import {notify} from "@/hooks/notify.jsx";
 import {parseDate} from "@internationalized/date";
 import PropTypes from 'prop-types';
 import {SAanimal} from "@/utils/columns";
+import {padTo2Digits} from "@/utils/padTo2Digits";
+import {ReactSearchAutocomplete} from 'react-search-autocomplete'
+import SearchBar from "@/components/SearchBar.jsx";
 
 InputAnimalComponent.propTypes = {
     animalUpdate: PropTypes.object
@@ -19,15 +22,13 @@ InputAnimalComponent.propTypes = {
 export default function InputAnimalComponent({animalUpdate}) {
     const {getAllFertilisation, getFertilisations} = useFertilisationStore();
     const {createAnimal, getIsResolving, updateAnimal} = useAnimalStore();
-    const {getParentsApi, getMothers, getFathers} = useParentsStore();
+    const {getProspectiveParents, getMothers, getFathers} = useParentsStore();
     const [animal, setAnimal] = useState(SAanimal);
     const {getColorsApi, getColors} = useColorsStore();
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
         getAllFertilisation();
         getColorsApi();
-        getParentsApi();
-
         if (animalUpdate) {
             const {animalMother, animalFather, ...rest} = animalUpdate;
             const updatedAnimal = {
@@ -39,15 +40,13 @@ export default function InputAnimalComponent({animalUpdate}) {
                 animalColor: rest.animalColor.id,
                 animalSex: rest.animalSex,
             };
-
             if (animalMother) {
                 updatedAnimal.animalMother = animalMother.id;
             }
-
             if (animalFather) {
                 updatedAnimal.animalFather = animalFather.id;
             }
-
+            getProspectiveParents(updatedAnimal.animalBirthDate);
             setAnimal(updatedAnimal);
         }
 
@@ -62,6 +61,9 @@ export default function InputAnimalComponent({animalUpdate}) {
                 ...animal,
                 animalBirthDate: `${e.year}-${padTo2Digits(e.month)}-${padTo2Digits(e.day)}T00:00:00.000Z`
             })
+            if (e.year > 1960) {
+                getProspectiveParents(`${e.year}-${padTo2Digits(e.month)}-${padTo2Digits(e.day)}T00:00:00.000`);
+            }
             return;
         }
         setAnimal({
@@ -92,10 +94,6 @@ export default function InputAnimalComponent({animalUpdate}) {
 
     const onHandleBack = () => {
         window.history.back();
-    }
-
-    function padTo2Digits(num) {
-        return num.toString().padStart(2, '0');
     }
 
     const getDate = () => {
@@ -210,52 +208,20 @@ export default function InputAnimalComponent({animalUpdate}) {
                             Datos de los padres
                         </p>
                     </div>
-                    <div className="flex gap-2">
-                        <Autocomplete
-                            label="Padre"
-                            name="animalFather"
-                            defaultItems={getFathers()}
-                            onKeyDown={(e) => e.continuePropagation()}
-                            selectedKey={animal.animalFather}
-                            onSelectionChange={
-                                (e) => {
-                                    setAnimal({
-                                        ...animal, animalFather: e
-                                    });
-                                }
-                            }
-                        >
-                            {(item) => {
-                                let itemString = `${item.parent.name} - ${item.parent.animalFarmNumber}`
-                                return <AutocompleteItem key={item.father.id}>
-                                    {itemString}
-                                </AutocompleteItem>
-                            }
-                            }
-                        </Autocomplete>
-                        <Autocomplete
-                            label="Madre"
-                            name="animalMother"
-                            defaultItems={getMothers()}
-                            onKeyDown={(e) => e.continuePropagation()}
-                            selectedKey={animal.animalMother}
-                            onSelectionChange={
-                                (e) => {
-                                    setAnimal({
-                                        ...animal, animalMother: e
-                                    });
-                                }
-                            }
-                        >
-                            {(item) => {
-                                let itemString = `${item.parent.name} - ${item.parent.animalFarmNumber}`
-                                return <AutocompleteItem key={item.mother.id}>
-                                    {itemString}
-                                </AutocompleteItem>
-                            }
-                            }
-                        </Autocomplete>
+
+                    <div className="flex">
+                        <div>
+                            <h2>Buscar padre</h2>
+                            <SearchBar isOpen={isModalOpen} onOpenChange={setIsModalOpen} data={getFathers()}/>
+                            <Button color="success" onClick={() => setIsModalOpen(true)}>Buscar</Button>
+                        </div>
+                        <div>
+                            <h2>Buscar madre</h2>
+                            <SearchBar isOpen={isModalOpen} onOpenChange={setIsModalOpen} data={getMothers()}/>
+                            <Button color="success" onClick={() => setIsModalOpen(true)}>Buscar</Button>
+                        </div>
                     </div>
+
 
                 </CardBody>
                 <CardFooter className="flex gap-2 justify-end">

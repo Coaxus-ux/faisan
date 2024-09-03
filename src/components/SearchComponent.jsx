@@ -7,7 +7,9 @@ import {useFertilisationStore} from "@/store/FertilisationStore";
 import {useFiltersStore} from "@/store/filtersStore";
 import {useNavigate} from "react-router-dom";
 import {isEmpty} from "@/utils/objectLength";
+
 export default function SearchComponent() {
+    const url = window.location.pathname;
     const navigate = useNavigate();
     const {setGlobalFilters, getFilters, clearFilters} = useFiltersStore();
     const {getAllFertilisation, fertilisation} = useFertilisationStore();
@@ -38,16 +40,25 @@ export default function SearchComponent() {
         clearFilters();
         setFilters(getFilters());
     }
-    return (<section className="shadow bg-white rounded p-5 flex flex-col gap-3">
+    return (<section className="shadow bg-white rounded-xl p-5 flex flex-col gap-3">
         <div className="flex justify-between">
             <div className="flex gap-2 items-center">
                 <TbReportSearch size="30"/>
                 <h3 className="font-bold text-2xl">Buscador de registros.</h3>
             </div>
-            <Button color="success" variant="flat" className="px-8" onClick={()=>{
-                navigate("/animal/create")
-            }}>Crear
-                nuevo</Button>
+            <div className="gap-2 flex">
+
+                <Button color="primary" variant="flat" onClick={() => {
+                    navigate(url === "/female" ? "/animal/parents-management/mothers" : "/animal/parents-management/fathers" )
+                }}>Gestión {
+                    url === "/females" ? "madres" : "padres"
+                    }
+                </Button>
+                <Button color="success" variant="flat" onClick={() => {
+                    navigate("/animal/create")
+                }}>Crear nuevo
+                </Button>
+            </div>
         </div>
         <div className="flex gap-2 items-center h-16">
             <div className="flex gap-1 items-center">
@@ -121,7 +132,8 @@ export default function SearchComponent() {
                 >
                     {(item) => <AutocompleteItem key={item.id}>{item.typeFertilisation}</AutocompleteItem>}
                 </Autocomplete>
-                <Input label="Numero animal" type="number" name="number" onChange={onHandleFilterChange} autoComplete="off"
+                <Input label="Numero animal" type="number" name="number" onChange={onHandleFilterChange}
+                       autoComplete="off"
                        value={filters.number.value}/>
                 <Input label="Numero FEDEGAN" type="number" name="fedeganNumber" onChange={onHandleFilterChange}
                        autoComplete="off"

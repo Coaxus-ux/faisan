@@ -75,6 +75,7 @@ export default function AnimalDetails() {
                                                                                     showEdit={false}/>
                                                         })
                                                 }
+
                                             </ScrollShadow>
                                         </Tab>
                                         <Tab title={
@@ -83,7 +84,15 @@ export default function AnimalDetails() {
                                                 <span>Grafico</span>
                                             </div>
                                         } className="w-full h-full items-center justify-center flex">
-                                            <WeightChart animalWeights={animal.weights}/>
+                                            {
+                                                    animal.weights.length === 0 ? (
+                                                            <div className="flex items-center justify-center">
+                                                        <span
+                                                            className="text-2xl text-gray-500">No hay pesos registrados</span>
+                                                            </div>
+                                                        ) :
+                                                        <WeightChart animalWeights={animal.weights}/>
+                                                }
                                         </Tab>
                                     </Tabs>
                                 </CardBody>

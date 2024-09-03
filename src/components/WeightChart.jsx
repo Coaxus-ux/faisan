@@ -6,55 +6,68 @@ import {
     PointElement,
     Title,
     Tooltip,
-    Legend
-} from 'chart.js';
-import {Line} from 'react-chartjs-2';
+    Legend,
+    Filler,
+} from 'chart.js'
+import {Line} from 'react-chartjs-2'
 
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend);
+ChartJS.register(
+    LineElement,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler
+)
 
-import Props from 'prop-types';
-import {useEffect, useRef} from "react";
+import {useEffect, useRef} from 'react'
+import Props from 'prop-types'
 
 WeightChart.propTypes = {
-    animalWeights: Props.array.isRequired
+    animalWeights: Props.array.isRequired,
 }
 
 export default function WeightChart({animalWeights}) {
-    const chartRef = useRef(null);
+    const chartRef = useRef(null)
 
     const data = {
-        labels: animalWeights.map((weight) => weight.dateWeight.split("T")[0]),
+        labels: animalWeights.map((weight) => weight.dateWeight.split('T')[0]),
         datasets: [
             {
                 label: 'Peso',
                 data: animalWeights.map((weight) => weight.weightAnimal),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }
-        ]
-    };
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+            },
+        ],
+    }
 
     const options = {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
             y: {
-                beginAtZero: true
-            }
-        }
-    };
+                beginAtZero: true,
+            },
+        },
+    }
 
     useEffect(() => {
-        // Destruir el gráfico cuando el componente se desmonta
         return () => {
             if (chartRef.current) {
-                chartRef.current.destroy();
+                chartRef.current.destroy()
             }
-        };
-    }, []);
+        }
+    }, [])
 
-    return <div className="w-full">
-        <Line ref={chartRef} data={data} options={options}/>
-    </div>;
+    return (
+        <div className="w-full">
+            <Line ref={chartRef} data={data} options={options}/>
+        </div>
+    )
 }

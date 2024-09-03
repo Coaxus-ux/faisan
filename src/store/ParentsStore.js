@@ -5,6 +5,8 @@ import {getUserId} from "@/utils/getUserId";
 export const useParentsStore = create((set, get) => ({
     mothers: [],
     fathers: [],
+    prospectiveMothers: [],
+    prospectiveFathers: [],
     getMothers: () => get().mothers,
     getFathers: () => get().fathers,
     getParentsApi: async () => {
@@ -19,4 +21,20 @@ export const useParentsStore = create((set, get) => ({
             set({fathers: response.data.parents})
         })
     },
+    getProspectiveParents: async (animalBirthDate) => {
+        const sexes = ['Hembra', 'Macho'];
+        for (const sex of sexes) {
+            await axiosInstance.post('/animal/prospectiveParents', {
+                userOwner: getUserId(),
+                animalSex: sex,
+                animalBirthDate
+            }).then((response) => {
+                if (sex === 'Hembra') {
+                    set({mothers: response.data.animal});
+                } else {
+                    set({fathers: response.data.animal});
+                }
+            });
+        }
+    }
 }))
