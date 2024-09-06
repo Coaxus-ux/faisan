@@ -12,7 +12,6 @@ import {parseDate} from "@internationalized/date";
 import PropTypes from 'prop-types';
 import {SAanimal} from "@/utils/columns";
 import {padTo2Digits} from "@/utils/padTo2Digits";
-import {ReactSearchAutocomplete} from 'react-search-autocomplete'
 import SearchBar from "@/components/SearchBar.jsx";
 
 InputAnimalComponent.propTypes = {
@@ -20,14 +19,14 @@ InputAnimalComponent.propTypes = {
 }
 
 export default function InputAnimalComponent({animalUpdate}) {
-    const {getAllFertilisation, getFertilisations} = useFertilisationStore();
+    const {getAvailableFertilisations, getFertilisations} = useFertilisationStore();
     const {createAnimal, getIsResolving, updateAnimal} = useAnimalStore();
     const {getProspectiveParents, getMothers, getFathers} = useParentsStore();
     const [animal, setAnimal] = useState(SAanimal);
     const {getColorsApi, getColors} = useColorsStore();
     const [isModalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
-        getAllFertilisation();
+        getAvailableFertilisations();
         getColorsApi();
         if (animalUpdate) {
             const {animalMother, animalFather, ...rest} = animalUpdate;

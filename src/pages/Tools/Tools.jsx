@@ -20,7 +20,7 @@ export default function Tools() {
   const navigate = useNavigate();
   return (
     <>
-      <div className=" flex justify-center items-center h-lvh gap-4">
+      <div className=" flex justify-center items-center sm:h-lvh gap-2 flex-wrap">
         {list.map((item, index) => (
           <Card
             shadow="sm"

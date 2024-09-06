@@ -12,12 +12,12 @@ export default function SearchComponent() {
     const url = window.location.pathname;
     const navigate = useNavigate();
     const {setGlobalFilters, getFilters, clearFilters} = useFiltersStore();
-    const {getAllFertilisation, fertilisation} = useFertilisationStore();
+    const {getAvailableFertilisations, fertilisation} = useFertilisationStore();
     const [filters, setFilters] = useState(getFilters());
     const [isMounted, setIsMounted] = useState(false);
     useEffect(() => {
         if (!isMounted) {
-            getAllFertilisation();
+            getAvailableFertilisations();
             setIsMounted(true);
         }
         setGlobalFilters(filters);

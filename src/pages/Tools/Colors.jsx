@@ -4,6 +4,7 @@ import ColorSwatch from "@/components/ColorSwatch.jsx";
 import { useNavigate } from "react-router-dom";
 import { Breadcrumbs, BreadcrumbItem, Button } from "@nextui-org/react";
 import ModalColor from "@/components/ModalColor.jsx";
+import HeaderWithBreadcrumbs from "@/components/HeaderWithBreadcrumbs.jsx";
 
 export default function Colors() {
   const { getColorsApi, getColors } = useColorsStore();
@@ -15,31 +16,10 @@ export default function Colors() {
 
   return (
     <div className="m-10">
-      <div className="flex mb-10">
-        <Breadcrumbs>
-          <BreadcrumbItem
-            onClick={() => {
-              navigate("/tools");
-            }}
-            underline
-          >
-            Inicio
-          </BreadcrumbItem>
-          <BreadcrumbItem>Colores</BreadcrumbItem>
-        </Breadcrumbs>
-      </div>
-      <div className="flex justify-between py-3">
-        <h1 className="text-2xl font-bold">Colores</h1>
-        <Button
-          auto
-          size="small"
-          color="danger"
-          onClick={() => navigate("/tools")}
-        >
-          {" "}
-          Volver{" "}
-        </Button>
-      </div>
+         <HeaderWithBreadcrumbs
+                breadcrumbTitle="Colores"
+                pageTitle="Gestión de Colores"
+            />
       <div className="flex flex-wrap gap-3 px-3">
         <ModalColor />
         {getColors().map((color) => (

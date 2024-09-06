@@ -27,7 +27,6 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (error) => {
-
         if (error.response.status === 401) {
             if (localStorage.getItem('tryRefresh') === '1') {
                 localStorage.removeItem('tryRefresh');
@@ -37,7 +36,9 @@ axiosInstance.interceptors.response.use(
             localStorage.setItem('tryRefresh', '0');
             refreshToken();
         }
-        notify(error.response.data.message, 'error');
+        if (error.response.data.message !== "Expired JWT token!") {
+            notify(error.response.data.message, 'error');
+        }
         return Promise.reject(error);
     },
 );
