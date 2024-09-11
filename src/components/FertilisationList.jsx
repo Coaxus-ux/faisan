@@ -58,7 +58,7 @@ export default function FertilisationList({fertilisations}) {
                             <Button
                                 isIconOnly
                                 variant="light"
-                                color="success"
+                                color={fertilisation.typeFertilisationStatus ? "danger" : "success"}
                                 aria-label={`Editar ${fertilisation.typeFertilisation}`}
                                 onClick={() => handleDisable(fertilisation)}
                             >

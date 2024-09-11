@@ -1,14 +1,11 @@
 import { useEffect } from "react";
 import { useColorsStore } from "@/store/ColorsStore.js";
 import ColorSwatch from "@/components/ColorSwatch.jsx";
-import { useNavigate } from "react-router-dom";
-import { Breadcrumbs, BreadcrumbItem, Button } from "@nextui-org/react";
 import ModalColor from "@/components/ModalColor.jsx";
 import HeaderWithBreadcrumbs from "@/components/HeaderWithBreadcrumbs.jsx";
 
 export default function Colors() {
   const { getColorsApi, getColors } = useColorsStore();
-  const navigate = useNavigate();
   useEffect(() => {
     getColorsApi();
     // eslint-disable-next-line

@@ -6,13 +6,12 @@ import {useFertilisationStore} from "@/store/FertilisationStore";
 import {useColorsStore} from "@/store/ColorsStore.js";
 import {useEffect, useState} from "react";
 import {useAnimalStore} from "@/store/AnimalStore.js";
-import {useParentsStore} from "@/store/ParentsStore.js";
 import {notify} from "@/hooks/notify.jsx";
 import {parseDate} from "@internationalized/date";
 import PropTypes from 'prop-types';
 import {SAanimal} from "@/utils/columns";
 import {padTo2Digits} from "@/utils/padTo2Digits";
-import SearchBar from "@/components/SearchBar.jsx";
+import AutocompleteComponent from "@/components/AutocompleteComponent.jsx";
 
 InputAnimalComponent.propTypes = {
     animalUpdate: PropTypes.object
@@ -21,10 +20,8 @@ InputAnimalComponent.propTypes = {
 export default function InputAnimalComponent({animalUpdate}) {
     const {getAvailableFertilisations, getFertilisations} = useFertilisationStore();
     const {createAnimal, getIsResolving, updateAnimal} = useAnimalStore();
-    const {getProspectiveParents, getMothers, getFathers} = useParentsStore();
     const [animal, setAnimal] = useState(SAanimal);
     const {getColorsApi, getColors} = useColorsStore();
-    const [isModalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
         getAvailableFertilisations();
         getColorsApi();
@@ -45,7 +42,6 @@ export default function InputAnimalComponent({animalUpdate}) {
             if (animalFather) {
                 updatedAnimal.animalFather = animalFather.id;
             }
-            getProspectiveParents(updatedAnimal.animalBirthDate);
             setAnimal(updatedAnimal);
         }
 
@@ -54,15 +50,22 @@ export default function InputAnimalComponent({animalUpdate}) {
         };
     }, [animalUpdate]);
 
+    const onHandleChangeParentsInput = (e, sex) => {
+        const key = sex === "Macho" ? "animalFather" : "animalMother";
+        setAnimal({
+            ...animal, [key]: e
+        });
+        console.log(animal);
+    };
     const onHandleChange = (e) => {
         if (!Object.prototype.hasOwnProperty.call(e, "target")) {
             setAnimal({
                 ...animal,
                 animalBirthDate: `${e.year}-${padTo2Digits(e.month)}-${padTo2Digits(e.day)}T00:00:00.000Z`
             })
-            if (e.year > 1960) {
-                getProspectiveParents(`${e.year}-${padTo2Digits(e.month)}-${padTo2Digits(e.day)}T00:00:00.000`);
-            }
+            /* if (e.year > 1960) {
+                 getProspectiveParents(`${e.year}-${padTo2Digits(e.month)}-${padTo2Digits(e.day)}T00:00:00.000`);
+             }*/
             return;
         }
         setAnimal({
@@ -118,11 +121,12 @@ export default function InputAnimalComponent({animalUpdate}) {
                 <CardHeader>
                     <div className="flex gap-2 items-center">
                         <VscGitPullRequestCreate size="30"/>
-
                         <h3 className="font-bold text-2xl"> {animalUpdate ? "Editar Animal" : "Crear Animal"}</h3>
+
                     </div>
                 </CardHeader>
                 <CardBody className="flex justify-center gap-2 p-8">
+                    <p className="my-3 text-md font-semibold">Datos del animal</p>
                     <div className="flex gap-2">
                         <Input isRequired type="text" variant="flat" label="Nombre del animal" name="name"
                                onChange={onHandleChange}
@@ -202,25 +206,22 @@ export default function InputAnimalComponent({animalUpdate}) {
                             <AutocompleteItem key="Hembra">Hembra</AutocompleteItem>
                         </Autocomplete>
                     </div>
-                    <div>
-                        <p>
-                            Datos de los padres
-                        </p>
-                    </div>
 
-                    <div className="flex">
-                        <div>
-                            <h2>Buscar padre</h2>
-                            <SearchBar isOpen={isModalOpen} onOpenChange={setIsModalOpen} data={getFathers()}/>
-                            <Button color="success" onClick={() => setIsModalOpen(true)}>Buscar</Button>
-                        </div>
-                        <div>
-                            <h2>Buscar madre</h2>
-                            <SearchBar isOpen={isModalOpen} onOpenChange={setIsModalOpen} data={getMothers()}/>
-                            <Button color="success" onClick={() => setIsModalOpen(true)}>Buscar</Button>
+
+                    <div className="flex flex-col">
+                        <p className="my-3 text-md font-semibold">Datos de los padres</p>
+                        <div className="flex gap-3">
+
+                            <AutocompleteComponent label={"Padre"} sex={"Macho"} birthDate={animal.animalBirthDate}
+                                                   disabled={true}
+                                                   onHandleChangeParentsInput={onHandleChangeParentsInput}
+                            />
+                            <AutocompleteComponent label={"Madre"} sex={"Hembra"} birthDate={animal.animalBirthDate}
+                                                   disabled={true}
+                                                   onHandleChangeParentsInput={onHandleChangeParentsInput}
+                            />
                         </div>
                     </div>
-
 
                 </CardBody>
                 <CardFooter className="flex gap-2 justify-end">
