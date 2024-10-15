@@ -2,9 +2,7 @@ import {Autocomplete, AutocompleteItem} from "@nextui-org/react";
 import PropTypes from "prop-types";
 import {useAsyncList} from "@react-stately/data";
 import {useParentsStore} from "@/store/ParentsStore.js";
-import React, {useEffect} from "react";
-import {differenceInCalendarDays, differenceInCalendarMonths, differenceInCalendarYears, format} from "date-fns";
-import {es} from "date-fns/locale/es";
+import {useEffect, useState} from "react";
 
 AutocompleteComponent.propTypes = {
     label: PropTypes.string,
@@ -12,16 +10,28 @@ AutocompleteComponent.propTypes = {
     birthDate: PropTypes.string,
     isDisabled: PropTypes.bool,
     onHandleChangeParentsInput: PropTypes.func,
+    filterText: PropTypes.string
 }
 
-export default function AutocompleteComponent({label, sex, birthDate, isDisabled, onHandleChangeParentsInput}) {
+export default function AutocompleteComponent({
+                                                  label,
+                                                  sex,
+                                                  birthDate,
+                                                  isDisabled,
+                                                  onHandleChangeParentsInput,
+                                                  filterText
+                                              }) {
+    useEffect(() => {
+        list.setFilterText(filterText);
+    }, [filterText]);
+    const [ inputValue, setInputValue ] = useState([]);
     const {getProspectiveParents} = useParentsStore();
     const list = useAsyncList({
         async load({filterText}) {
             if (isDisabled) return {items: []};
 
             const response = await getProspectiveParents(birthDate, filterText, sex);
-
+            setInputValue(response);
             return {
                 items: response,
             };
@@ -33,13 +43,14 @@ export default function AutocompleteComponent({label, sex, birthDate, isDisabled
             <Autocomplete
                 className="w-full"
                 label={label}
-                inputValue={list.filterText}
+                defaultSelectedKey={filterText !== "" ? filterText : null}
                 isLoading={list.isLoading}
-                items={list.items}
+                items={inputValue}
                 onInputChange={list.setFilterText}
                 placeholder="Escribe para buscar ..."
                 onSelectionChange={(key) => {
                     onHandleChangeParentsInput(key, sex);
+
                 }}
             >
                 {(item) => {

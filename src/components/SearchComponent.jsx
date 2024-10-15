@@ -47,13 +47,6 @@ export default function SearchComponent() {
                 <h3 className="font-bold text-2xl">Buscador de registros.</h3>
             </div>
             <div className="gap-2 flex">
-
-                <Button color="primary" variant="flat" onClick={() => {
-                    navigate(url === "/female" ? "/animal/parents-management/mothers" : "/animal/parents-management/fathers" )
-                }}>Gestión {
-                    url === "/females" ? "madres" : "padres"
-                    }
-                </Button>
                 <Button color="success" variant="flat" onClick={() => {
                     navigate("/animal/create")
                 }}>Crear nuevo

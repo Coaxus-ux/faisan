@@ -28,7 +28,7 @@ axiosInstance.interceptors.response.use(
     },
     (error) => {
         if (error.response.status === 401) {
-            if (localStorage.getItem('tryRefresh') === '1') {
+            if (localStorage.getItem('tryRefresh') >= '1') {
                 localStorage.removeItem('tryRefresh');
                 window.location.href = '/auth/login';
                 return Promise.reject(error);

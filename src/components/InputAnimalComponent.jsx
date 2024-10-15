@@ -17,6 +17,7 @@ InputAnimalComponent.propTypes = {
     animalUpdate: PropTypes.object
 }
 
+
 export default function InputAnimalComponent({animalUpdate}) {
     const {getAvailableFertilisations, getFertilisations} = useFertilisationStore();
     const {createAnimal, getIsResolving, updateAnimal} = useAnimalStore();
@@ -26,7 +27,9 @@ export default function InputAnimalComponent({animalUpdate}) {
         getAvailableFertilisations();
         getColorsApi();
         if (animalUpdate) {
+
             const {animalMother, animalFather, ...rest} = animalUpdate;
+
             const updatedAnimal = {
                 name: rest.name,
                 animalFarmNumber: rest.animalFarmNumber,
@@ -55,7 +58,6 @@ export default function InputAnimalComponent({animalUpdate}) {
         setAnimal({
             ...animal, [key]: e
         });
-        console.log(animal);
     };
     const onHandleChange = (e) => {
         if (!Object.prototype.hasOwnProperty.call(e, "target")) {
@@ -63,9 +65,6 @@ export default function InputAnimalComponent({animalUpdate}) {
                 ...animal,
                 animalBirthDate: `${e.year}-${padTo2Digits(e.month)}-${padTo2Digits(e.day)}T00:00:00.000Z`
             })
-            /* if (e.year > 1960) {
-                 getProspectiveParents(`${e.year}-${padTo2Digits(e.month)}-${padTo2Digits(e.day)}T00:00:00.000`);
-             }*/
             return;
         }
         setAnimal({
@@ -74,6 +73,7 @@ export default function InputAnimalComponent({animalUpdate}) {
     };
 
     const onHandleCreate = () => {
+        console.log(animal);
         for (const key of Object.keys(animal)) {
             if (animal[key] === "" || animal[key] === null || animal[key] === undefined) {
                 if (key !== "animalFEDGAN" && key !== "animalFather" && key !== "animalMother") {
@@ -98,19 +98,13 @@ export default function InputAnimalComponent({animalUpdate}) {
         window.history.back();
     }
 
-    const getDate = () => {
+    const getFormatedDate = () => {
         const dateNow = new Date();
         try {
-            if (!animalUpdate || !animalUpdate.animalBirthDate) {
-                const dateToPrint = `${dateNow.getFullYear()}-${padTo2Digits(dateNow.getMonth() + 1)}-${padTo2Digits(dateNow.getDate())}`;
-                animal.animalBirthDate = `${dateToPrint}T00:00:00.000Z`;
-                return dateToPrint;
-            }
             const {animalBirthDate} = animalUpdate;
             const dateToPrint = animalBirthDate.split('T')[0];
             return dateToPrint;
         } catch (e) {
-            console.log(e);
             return `${dateNow.getFullYear()}-${padTo2Digits(dateNow.getMonth() + 1)}-${padTo2Digits(dateNow.getDate())}`;
         }
     };
@@ -148,7 +142,7 @@ export default function InputAnimalComponent({animalUpdate}) {
                             onChange={onHandleChange}
                             name="animalBirthDate"
                             granularity="day"
-                            defaultValue={parseDate(getDate())}
+                            defaultValue={parseDate(getFormatedDate())}
                         />
                     </div>
 
@@ -211,14 +205,18 @@ export default function InputAnimalComponent({animalUpdate}) {
                     <div className="flex flex-col">
                         <p className="my-3 text-md font-semibold">Datos de los padres</p>
                         <div className="flex gap-3">
-
-                            <AutocompleteComponent label={"Padre"} sex={"Macho"} birthDate={animal.animalBirthDate}
+                            <AutocompleteComponent label={"Padre"} sex={"Macho"}
+                                                   birthDate={animalUpdate ? animalUpdate.animalBirthDate : `${getFormatedDate()}T00:00:00`}
                                                    disabled={true}
                                                    onHandleChangeParentsInput={onHandleChangeParentsInput}
+                                                   filterText={animalUpdate && animalUpdate.animalMother ? animalUpdate.animalFather.idAnimal : ""}
                             />
-                            <AutocompleteComponent label={"Madre"} sex={"Hembra"} birthDate={animal.animalBirthDate}
+                            <AutocompleteComponent label={"Madre"} sex={"Hembra"}
+                                                   birthDate={animalUpdate ? animalUpdate.animalBirthDate : `${getFormatedDate()}T00:00:00`}
                                                    disabled={true}
                                                    onHandleChangeParentsInput={onHandleChangeParentsInput}
+                                                   filterText={animalUpdate && animalUpdate.animalMother ? animalUpdate.animalMother.idAnimal : ""}
+
                             />
                         </div>
                     </div>

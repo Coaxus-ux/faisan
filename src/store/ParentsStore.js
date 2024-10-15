@@ -8,7 +8,9 @@ export const useParentsStore = create((set, get) => ({
     getMothers: () => get().mothers,
     getFathers: () => get().fathers,
     getProspectiveParents: async (animalBirthDate, searchParam, animalSex) => {
-        animalBirthDate = animalBirthDate.slice(0, -1);
+        if (animalBirthDate.slice(-1) === 'Z') {
+            animalBirthDate = animalBirthDate.slice(0, -1);
+        }
         const response = await axiosInstance.post('/animal/prospectiveParents', {
             userOwner: getUserId(),
             searchParam: searchParam,
